@@ -5,7 +5,7 @@ export const Route = createFileRoute('/dashboard/')({
 })
 
 // Mock user role - will be replaced with real auth
-const mockUserRole = 'buyer' as 'worker' | 'buyer' | 'admin'
+const mockUserRole = 'worker' as 'worker' | 'buyer' | 'admin'
 
 function DashboardPage() {
   switch (mockUserRole) {
