@@ -1,0 +1,162 @@
+import {
+  BadgeCheck,
+  Bell,
+  ChevronsUpDown,
+  CreditCard,
+  LogOut,
+  Sparkles,
+  User,
+} from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/ui/sidebar'
+import { Button } from '../ui/button'
+// import { authClient } from '@/lib/auth-cilent'
+import { useNavigate } from '@tanstack/react-router'
+import { useTransition } from 'react'
+import { Spinner } from '../ui/spinner'
+// import { toast } from 'sonner'
+
+export function NavUser() {
+  const { isMobile } = useSidebar()
+  const [isTransitionPending, startTransition] = useTransition()
+  // const { data: session, isPending, error } = authClient.useSession()
+  const navigate = useNavigate()
+
+  // if (isPending) {
+  //   return <Spinner />
+  // }
+
+  // if (error) {
+  //   return 'Some Error occured in rendering sidebar.'
+  // }
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage
+                  // src={session?.user.image ?? ''}
+                  // alt={session?.user.name}
+                  src={'/person.jpeg'}
+                  alt={'Person Image'}
+                />
+                <AvatarFallback className="rounded-lg">
+                  <User />
+                </AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">
+                  {/* {session?.user.name} */}
+                  Adnan
+                </span>
+                <span className="truncate text-xs">
+                  {/* {session?.user.email} */}
+                  adnan@gmail.com
+                </span>
+              </div>
+              <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            side={isMobile ? 'bottom' : 'right'}
+            align="end"
+            sideOffset={4}
+          >
+            <DropdownMenuLabel className="p-0 font-normal">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    // src={session?.user.image ?? ''}
+                    // alt={session?.user.name}
+                    src={'/person.jpeg'}
+                    alt={'Person Image'}
+                  />
+                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">
+                    {/* {session?.user.name} */}
+                    Adnan
+                  </span>
+                  <span className="truncate text-xs">
+                    {/* {session?.user.email} */}
+                    adnan@gmail.com
+                  </span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Sparkles />
+                Upgrade to Pro
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <BadgeCheck />
+                Account
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CreditCard />
+                Billing
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Bell />
+                Notifications
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Button
+                variant="ghost"
+                className="w-full"
+                size="sm"
+                type="button"
+                disabled={isTransitionPending}
+                onClick={() => {
+                  startTransition(async () => {
+                    // await authClient.signOut({
+                    //   fetchOptions: {
+                    //     onSuccess: () => {
+                    //       navigate({ to: '/' })
+                    //       toast.success('Logged out successfully.')
+                    //     },
+                    //   },
+                    // })'
+                    navigate({ to: '/' })
+                  })
+                }}
+              >
+                {isTransitionPending ? <Spinner /> : <LogOut />}
+                Sign out
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  )
+}
