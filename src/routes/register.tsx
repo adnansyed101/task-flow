@@ -1,6 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import {
   Eye,
@@ -284,7 +283,7 @@ function RegisterPage() {
                   value={formData.role}
                   onValueChange={(value) => handleChange('role', value)}
                 >
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-12 w-full">
                     <SelectValue placeholder="Choose your role" />
                   </SelectTrigger>
                   <SelectContent>
