@@ -7,12 +7,12 @@ import {
   ShieldCheck,
   Sparkles,
   Zap,
-  // Star,
+  Star,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
 import { SiteHeader, SiteFooter } from '@/components/site-chrome'
-// import { useStore } from '@/lib/store'
+import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/')({
@@ -274,53 +274,53 @@ function HowItWorks() {
   )
 }
 
-// function BestWorkers() {
-//   const workers = useStore((s) => s.users)
-//     .filter((u) => u.role === "worker")
-//     .sort((a, b) => b.coins - a.coins)
-//     .slice(0, 6);
-//   return (
-//     <section id="workers" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-//       <div className="flex items-end justify-between gap-6">
-//         <div>
-//           <div className="text-xs uppercase tracking-widest text-muted-foreground">
-//             Top of the leaderboard
-//           </div>
-//           <h2 className="mt-2 font-display text-4xl sm:text-5xl">
-//             Best workers this month
-//           </h2>
-//         </div>
-//       </div>
-//       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-//         {workers.map((w, i) => (
-//           <div
-//             key={w.id}
-//             className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5"
-//           >
-//             <div className="relative">
-//               <img
-//                 src={w.photoURL}
-//                 alt={w.name}
-//                 className="h-14 w-14 rounded-full bg-muted ring-2 ring-border"
-//               />
-//               <div className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-//                 #{i + 1}
-//               </div>
-//             </div>
-//             <div className="min-w-0 flex-1">
-//               <div className="truncate font-medium">{w.name}</div>
-//               <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
-//                 <Coins className="h-3 w-3 text-accent" />
-//                 <span className="tabular-nums">{w.coins} coins</span>
-//               </div>
-//             </div>
-//             <Star className="h-4 w-4 text-accent" fill="currentColor" />
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// }
+function BestWorkers() {
+  const workers = useStore((s) => s.users)
+    .filter((u) => u.role === 'worker')
+    .sort((a, b) => b.coins - a.coins)
+    .slice(0, 6)
+  return (
+    <section id="workers" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">
+            Top of the leaderboard
+          </div>
+          <h2 className="mt-2 font-display text-4xl sm:text-5xl">
+            Best workers this month
+          </h2>
+        </div>
+      </div>
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {workers.map((w, i) => (
+          <div
+            key={w.id}
+            className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5"
+          >
+            <div className="relative">
+              <img
+                src={w.photoURL}
+                alt={w.name}
+                className="h-14 w-14 rounded-full bg-muted ring-2 ring-border"
+              />
+              <div className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                #{i + 1}
+              </div>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-medium">{w.name}</div>
+              <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                <Coins className="h-3 w-3 text-accent" />
+                <span className="tabular-nums">{w.coins} coins</span>
+              </div>
+            </div>
+            <Star className="h-4 w-4 text-accent" fill="currentColor" />
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
 
 const TESTIMONIALS = [
   {
@@ -475,7 +475,7 @@ function Home() {
       <Hero />
       <StatsBar />
       <HowItWorks />
-      {/* <BestWorkers /> */}
+      <BestWorkers />
       <Testimonials />
       <TaskCategories />
       <CTABand />
