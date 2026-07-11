@@ -1,7 +1,6 @@
-import { Link, useRouterState } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Coins, LogOut, Menu, X } from 'lucide-react'
 import { useState } from 'react'
-import { currentUser, logout, useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -12,13 +11,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Route } from '@/routes/__root'
+import { authClient } from '#/lib/auth-client'
 
-const GH = 'https://github.com/programming-hero-web-course2'
+const GH = 'https://github.com'
 
 export function SiteHeader() {
-  const user = useStore(() => currentUser())
-  const path = useRouterState({ select: (s) => s.location.pathname })
   const [open, setOpen] = useState(false)
+
+  const { session } = Route.useRouteContext()
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
@@ -53,11 +54,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          {user ? (
+          {session ? (
             <>
               <div className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm">
                 <Coins className="h-3.5 w-3.5 text-accent" />
-                <span className="font-medium tabular-nums">{user.coins}</span>
+                <span className="font-medium tabular-nums">{10}</span>
               </div>
               <Button
                 asChild
@@ -70,22 +71,32 @@ export function SiteHeader() {
               <DropdownMenu>
                 <DropdownMenuTrigger className="focus:outline-none">
                   <Avatar className="h-9 w-9 ring-2 ring-border">
-                    <AvatarImage src={user.photoURL} alt={user.name} />
-                    <AvatarFallback>{user.name[0]}</AvatarFallback>
+                    <AvatarImage
+                      src={session.user.image || '/batman.jpg'}
+                      alt={session.user.name}
+                    />
+                    <AvatarFallback>{session.user.name}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="text-sm font-medium">{user.name}</div>
+                  <DropdownMenuLabel className="flex justify-between">
+                    <div className="text-sm font-medium">
+                      {session.user.name}
+                    </div>
+                    -
                     <div className="text-xs capitalize text-muted-foreground">
-                      {user.role}
+                      {session.user.role}
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard">Dashboard</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => logout()}>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await authClient.signOut()
+                    }}
+                  >
                     <LogOut className="mr-2 h-4 w-4" /> Log out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -102,10 +113,10 @@ export function SiteHeader() {
           ) : (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link to="/login">Login</Link>
+                <Link to="/auth/login">Login</Link>
               </Button>
               <Button asChild size="sm" className="rounded-full">
-                <Link to="/register">Register</Link>
+                <Link to="/auth/register">Register</Link>
               </Button>
               <a
                 href={GH}
@@ -126,75 +137,75 @@ export function SiteHeader() {
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-      </div>
 
-      {open && (
-        <div className="border-t border-border/60 bg-background px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-3">
-            {user ? (
-              <>
-                <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={user.photoURL} />
-                    <AvatarFallback>{user.name[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-medium">
-                      {user.name}
-                    </div>
-                    <div className="text-xs capitalize text-muted-foreground">
-                      {user.role} · {user.coins} coins
+        {open && (
+          <div className="border-t border-border/60 bg-background px-4 py-4 md:hidden">
+            <div className="flex flex-col gap-3">
+              {session ? (
+                <>
+                  <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src={session.user.image || '/batman.jpg'}
+                        alt={session.user.name}
+                      />
+                      <AvatarFallback>{session.user.name}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-medium">
+                        {session.user.name}
+                      </div>
+                      <div className="text-xs capitalize text-muted-foreground">
+                        {session.user.role} · {10} coins
+                      </div>
                     </div>
                   </div>
-                </div>
-                <Link
-                  to="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-2 text-sm hover:bg-muted"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => {
-                    logout()
-                    setOpen(false)
-                  }}
-                  className="rounded-md px-3 py-2 text-left text-sm hover:bg-muted"
-                >
-                  Log out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-2 text-sm hover:bg-muted"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-            <a
-              href={GH}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md border border-input px-3 py-2 text-sm"
-            >
-              Join as Developer
-            </a>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className="rounded-md px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await authClient.signOut()
+                    }}
+                    className="rounded-md px-3 py-2 text-left text-sm hover:bg-muted"
+                  >
+                    Log out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/auth/login"
+                    onClick={() => setOpen(false)}
+                    className="rounded-md px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/auth/register"
+                    onClick={() => setOpen(false)}
+                    className="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+              <a
+                href={GH}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-md border border-input px-3 py-2 text-sm"
+              >
+                Join as Developer
+              </a>
+            </div>
           </div>
-        </div>
-      )}
-      {/* silence unused-var lint if path stays unused */}
-      <span className="hidden">{path}</span>
+        )}
+      </div>
     </header>
   )
 }
@@ -224,12 +235,12 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              <Link to="/register" className="hover:text-foreground">
+              <Link to="/auth/register" className="hover:text-foreground">
                 Become a worker
               </Link>
             </li>
             <li>
-              <Link to="/register" className="hover:text-foreground">
+              <Link to="/auth/register" className="hover:text-foreground">
                 Post a task
               </Link>
             </li>

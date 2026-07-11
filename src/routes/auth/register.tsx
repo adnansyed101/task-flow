@@ -26,7 +26,7 @@ import { authClient } from '#/lib/auth-client'
 import { Spinner } from '#/components/ui/spinner'
 import { toast } from 'sonner'
 
-export const Route = createFileRoute('/register')({
+export const Route = createFileRoute('/auth/register')({
   head: () => ({
     meta: [
       { title: 'Create account — Micron' },
@@ -51,6 +51,7 @@ function RegisterPage() {
         password: formData.password, // user password -> min 8 characters by default
         name: formData.fullName, // user display name
         image: formData.image, // User image URL (optional)
+        role: formData.role, // User role (optional)
         callbackURL: '/dashboard', // A URL to redirect to after the user verifies their email (optional)
       },
       {
@@ -99,7 +100,7 @@ function RegisterPage() {
           <h2 className="font-display text-3xl">Create your account</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Already a member?{' '}
-            <Link to="/login" className="underline underline-offset-4">
+            <Link to="/auth/login" className="underline underline-offset-4">
               Log in
             </Link>
             .

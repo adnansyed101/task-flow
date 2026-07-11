@@ -35,21 +35,21 @@ const slides = [
     heading: 'Small tasks. Real payouts.',
     body: 'Turn spare minutes into coins. Complete simple tasks from verified buyers and cash out from 200 coins.',
     cta: 'Start earning',
-    to: '/register' as const,
+    to: '/auth/register' as const,
   },
   {
     kicker: 'For buyers',
     heading: 'Get real work done, fast.',
     body: 'Reach thousands of ready workers. Post a task in under a minute — pay only for approved submissions.',
     cta: 'Post a task',
-    to: '/register' as const,
+    to: '/auth/register' as const,
   },
   {
     kicker: 'Built for trust',
     heading: 'Transparent. Reviewed. Paid.',
     body: 'Every submission is reviewed. Every approved task is instantly paid in coins you can withdraw.',
     cta: 'See how it works',
-    to: '/register' as const,
+    to: '/auth/register' as const,
   },
 ]
 
@@ -451,7 +451,7 @@ function CTABand() {
               variant="secondary"
               className="rounded-full"
             >
-              <Link to="/register">Create account</Link>
+              <Link to="/auth/register">Create account</Link>
             </Button>
             <Button
               asChild
@@ -459,7 +459,7 @@ function CTABand() {
               variant="outline"
               className="rounded-full border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground hover:text-primary"
             >
-              <Link to="/login">Log in</Link>
+              <Link to="/auth/login">Log in</Link>
             </Button>
           </div>
         </div>
