@@ -21,8 +21,8 @@ export function SiteHeader() {
 
   const { session } = Route.useRouteContext()
 
-  async function logOut() {
-    await authClient.signOut()
+  function logOut() {
+    void authClient.signOut()
     window.location.reload()
   }
 
