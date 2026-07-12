@@ -13,18 +13,26 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardWorkerRouteImport } from './routes/dashboard/worker'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as DashboardWorkerRouteRouteImport } from './routes/dashboard/worker/route'
 import { Route as DashboardBuyerRouteRouteImport } from './routes/dashboard/buyer/route'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
+import { Route as DashboardWorkerIndexRouteImport } from './routes/dashboard/worker/index'
 import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buyer/index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin/index'
+import { Route as DashboardWorkerWithdrawalsRouteImport } from './routes/dashboard/worker/withdrawals'
+import { Route as DashboardWorkerTaskListRouteImport } from './routes/dashboard/worker/task-list'
+import { Route as DashboardWorkerSubmissionsRouteImport } from './routes/dashboard/worker/submissions'
+import { Route as DashboardWorkerHomeRouteImport } from './routes/dashboard/worker/home'
 import { Route as DashboardBuyerPurchaseCoinsRouteImport } from './routes/dashboard/buyer/purchase-coins'
 import { Route as DashboardBuyerPaymentHistoryRouteImport } from './routes/dashboard/buyer/payment-history'
 import { Route as DashboardBuyerMyTaskRouteImport } from './routes/dashboard/buyer/my-task'
 import { Route as DashboardBuyerHomeRouteImport } from './routes/dashboard/buyer/home'
 import { Route as DashboardBuyerAddTaskRouteImport } from './routes/dashboard/buyer/add-task'
+import { Route as DashboardAdminWithdrawRequestsRouteImport } from './routes/dashboard/admin/withdraw-requests'
+import { Route as DashboardAdminManageUserRouteImport } from './routes/dashboard/admin/manage-user'
+import { Route as DashboardAdminManageTaskRouteImport } from './routes/dashboard/admin/manage-task'
 import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -48,11 +56,6 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardWorkerRoute = DashboardWorkerRouteImport.update({
-  id: '/worker',
-  path: '/worker',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -62,6 +65,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const DashboardWorkerRouteRoute = DashboardWorkerRouteRouteImport.update({
+  id: '/worker',
+  path: '/worker',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardBuyerRouteRoute = DashboardBuyerRouteRouteImport.update({
   id: '/buyer',
@@ -73,6 +81,11 @@ const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardWorkerIndexRoute = DashboardWorkerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardWorkerRouteRoute,
+} as any)
 const DashboardBuyerIndexRoute = DashboardBuyerIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -82,6 +95,28 @@ const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
+const DashboardWorkerWithdrawalsRoute =
+  DashboardWorkerWithdrawalsRouteImport.update({
+    id: '/withdrawals',
+    path: '/withdrawals',
+    getParentRoute: () => DashboardWorkerRouteRoute,
+  } as any)
+const DashboardWorkerTaskListRoute = DashboardWorkerTaskListRouteImport.update({
+  id: '/task-list',
+  path: '/task-list',
+  getParentRoute: () => DashboardWorkerRouteRoute,
+} as any)
+const DashboardWorkerSubmissionsRoute =
+  DashboardWorkerSubmissionsRouteImport.update({
+    id: '/submissions',
+    path: '/submissions',
+    getParentRoute: () => DashboardWorkerRouteRoute,
+  } as any)
+const DashboardWorkerHomeRoute = DashboardWorkerHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => DashboardWorkerRouteRoute,
 } as any)
 const DashboardBuyerPurchaseCoinsRoute =
   DashboardBuyerPurchaseCoinsRouteImport.update({
@@ -110,6 +145,24 @@ const DashboardBuyerAddTaskRoute = DashboardBuyerAddTaskRouteImport.update({
   path: '/add-task',
   getParentRoute: () => DashboardBuyerRouteRoute,
 } as any)
+const DashboardAdminWithdrawRequestsRoute =
+  DashboardAdminWithdrawRequestsRouteImport.update({
+    id: '/withdraw-requests',
+    path: '/withdraw-requests',
+    getParentRoute: () => DashboardAdminRouteRoute,
+  } as any)
+const DashboardAdminManageUserRoute =
+  DashboardAdminManageUserRouteImport.update({
+    id: '/manage-user',
+    path: '/manage-user',
+    getParentRoute: () => DashboardAdminRouteRoute,
+  } as any)
+const DashboardAdminManageTaskRoute =
+  DashboardAdminManageTaskRouteImport.update({
+    id: '/manage-task',
+    path: '/manage-task',
+    getParentRoute: () => DashboardAdminRouteRoute,
+  } as any)
 const DashboardAdminHomeRoute = DashboardAdminHomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -127,36 +180,51 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
+  '/dashboard/worker': typeof DashboardWorkerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
+  '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
+  '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
+  '/dashboard/admin/withdraw-requests': typeof DashboardAdminWithdrawRequestsRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
   '/dashboard/buyer/payment-history': typeof DashboardBuyerPaymentHistoryRoute
   '/dashboard/buyer/purchase-coins': typeof DashboardBuyerPurchaseCoinsRoute
+  '/dashboard/worker/home': typeof DashboardWorkerHomeRoute
+  '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
+  '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
+  '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
+  '/dashboard/worker/': typeof DashboardWorkerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
+  '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
+  '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
+  '/dashboard/admin/withdraw-requests': typeof DashboardAdminWithdrawRequestsRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
   '/dashboard/buyer/payment-history': typeof DashboardBuyerPaymentHistoryRoute
   '/dashboard/buyer/purchase-coins': typeof DashboardBuyerPurchaseCoinsRoute
+  '/dashboard/worker/home': typeof DashboardWorkerHomeRoute
+  '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
+  '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
+  '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/buyer': typeof DashboardBuyerIndexRoute
+  '/dashboard/worker': typeof DashboardWorkerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,19 +233,27 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
+  '/dashboard/worker': typeof DashboardWorkerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
+  '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
+  '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
+  '/dashboard/admin/withdraw-requests': typeof DashboardAdminWithdrawRequestsRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
   '/dashboard/buyer/payment-history': typeof DashboardBuyerPaymentHistoryRoute
   '/dashboard/buyer/purchase-coins': typeof DashboardBuyerPurchaseCoinsRoute
+  '/dashboard/worker/home': typeof DashboardWorkerHomeRoute
+  '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
+  '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
+  '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
+  '/dashboard/worker/': typeof DashboardWorkerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,36 +263,51 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/admin'
     | '/dashboard/buyer'
+    | '/dashboard/worker'
     | '/auth/login'
     | '/auth/register'
-    | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
     | '/dashboard/admin/home'
+    | '/dashboard/admin/manage-task'
+    | '/dashboard/admin/manage-user'
+    | '/dashboard/admin/withdraw-requests'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
     | '/dashboard/buyer/payment-history'
     | '/dashboard/buyer/purchase-coins'
+    | '/dashboard/worker/home'
+    | '/dashboard/worker/submissions'
+    | '/dashboard/worker/task-list'
+    | '/dashboard/worker/withdrawals'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
+    | '/dashboard/worker/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/auth/login'
     | '/auth/register'
-    | '/dashboard/worker'
     | '/dashboard'
     | '/api/auth/$'
     | '/dashboard/admin/home'
+    | '/dashboard/admin/manage-task'
+    | '/dashboard/admin/manage-user'
+    | '/dashboard/admin/withdraw-requests'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
     | '/dashboard/buyer/payment-history'
     | '/dashboard/buyer/purchase-coins'
+    | '/dashboard/worker/home'
+    | '/dashboard/worker/submissions'
+    | '/dashboard/worker/task-list'
+    | '/dashboard/worker/withdrawals'
     | '/dashboard/admin'
     | '/dashboard/buyer'
+    | '/dashboard/worker'
   id:
     | '__root__'
     | '/'
@@ -224,19 +315,27 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/admin'
     | '/dashboard/buyer'
+    | '/dashboard/worker'
     | '/auth/login'
     | '/auth/register'
-    | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
     | '/dashboard/admin/home'
+    | '/dashboard/admin/manage-task'
+    | '/dashboard/admin/manage-user'
+    | '/dashboard/admin/withdraw-requests'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
     | '/dashboard/buyer/payment-history'
     | '/dashboard/buyer/purchase-coins'
+    | '/dashboard/worker/home'
+    | '/dashboard/worker/submissions'
+    | '/dashboard/worker/task-list'
+    | '/dashboard/worker/withdrawals'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
+    | '/dashboard/worker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -276,13 +375,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/worker': {
-      id: '/dashboard/worker'
-      path: '/worker'
-      fullPath: '/dashboard/worker'
-      preLoaderRoute: typeof DashboardWorkerRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/auth/register': {
       id: '/auth/register'
       path: '/register'
@@ -296,6 +388,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/dashboard/worker': {
+      id: '/dashboard/worker'
+      path: '/worker'
+      fullPath: '/dashboard/worker'
+      preLoaderRoute: typeof DashboardWorkerRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/buyer': {
       id: '/dashboard/buyer'
@@ -311,6 +410,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminRouteRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/worker/': {
+      id: '/dashboard/worker/'
+      path: '/'
+      fullPath: '/dashboard/worker/'
+      preLoaderRoute: typeof DashboardWorkerIndexRouteImport
+      parentRoute: typeof DashboardWorkerRouteRoute
+    }
     '/dashboard/buyer/': {
       id: '/dashboard/buyer/'
       path: '/'
@@ -324,6 +430,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
+    }
+    '/dashboard/worker/withdrawals': {
+      id: '/dashboard/worker/withdrawals'
+      path: '/withdrawals'
+      fullPath: '/dashboard/worker/withdrawals'
+      preLoaderRoute: typeof DashboardWorkerWithdrawalsRouteImport
+      parentRoute: typeof DashboardWorkerRouteRoute
+    }
+    '/dashboard/worker/task-list': {
+      id: '/dashboard/worker/task-list'
+      path: '/task-list'
+      fullPath: '/dashboard/worker/task-list'
+      preLoaderRoute: typeof DashboardWorkerTaskListRouteImport
+      parentRoute: typeof DashboardWorkerRouteRoute
+    }
+    '/dashboard/worker/submissions': {
+      id: '/dashboard/worker/submissions'
+      path: '/submissions'
+      fullPath: '/dashboard/worker/submissions'
+      preLoaderRoute: typeof DashboardWorkerSubmissionsRouteImport
+      parentRoute: typeof DashboardWorkerRouteRoute
+    }
+    '/dashboard/worker/home': {
+      id: '/dashboard/worker/home'
+      path: '/home'
+      fullPath: '/dashboard/worker/home'
+      preLoaderRoute: typeof DashboardWorkerHomeRouteImport
+      parentRoute: typeof DashboardWorkerRouteRoute
     }
     '/dashboard/buyer/purchase-coins': {
       id: '/dashboard/buyer/purchase-coins'
@@ -360,6 +494,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardBuyerAddTaskRouteImport
       parentRoute: typeof DashboardBuyerRouteRoute
     }
+    '/dashboard/admin/withdraw-requests': {
+      id: '/dashboard/admin/withdraw-requests'
+      path: '/withdraw-requests'
+      fullPath: '/dashboard/admin/withdraw-requests'
+      preLoaderRoute: typeof DashboardAdminWithdrawRequestsRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
+    }
+    '/dashboard/admin/manage-user': {
+      id: '/dashboard/admin/manage-user'
+      path: '/manage-user'
+      fullPath: '/dashboard/admin/manage-user'
+      preLoaderRoute: typeof DashboardAdminManageUserRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
+    }
+    '/dashboard/admin/manage-task': {
+      id: '/dashboard/admin/manage-task'
+      path: '/manage-task'
+      fullPath: '/dashboard/admin/manage-task'
+      preLoaderRoute: typeof DashboardAdminManageTaskRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
+    }
     '/dashboard/admin/home': {
       id: '/dashboard/admin/home'
       path: '/home'
@@ -393,11 +548,17 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DashboardAdminRouteRouteChildren {
   DashboardAdminHomeRoute: typeof DashboardAdminHomeRoute
+  DashboardAdminManageTaskRoute: typeof DashboardAdminManageTaskRoute
+  DashboardAdminManageUserRoute: typeof DashboardAdminManageUserRoute
+  DashboardAdminWithdrawRequestsRoute: typeof DashboardAdminWithdrawRequestsRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
 }
 
 const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
   DashboardAdminHomeRoute: DashboardAdminHomeRoute,
+  DashboardAdminManageTaskRoute: DashboardAdminManageTaskRoute,
+  DashboardAdminManageUserRoute: DashboardAdminManageUserRoute,
+  DashboardAdminWithdrawRequestsRoute: DashboardAdminWithdrawRequestsRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
 }
 
@@ -425,17 +586,36 @@ const DashboardBuyerRouteRouteChildren: DashboardBuyerRouteRouteChildren = {
 const DashboardBuyerRouteRouteWithChildren =
   DashboardBuyerRouteRoute._addFileChildren(DashboardBuyerRouteRouteChildren)
 
+interface DashboardWorkerRouteRouteChildren {
+  DashboardWorkerHomeRoute: typeof DashboardWorkerHomeRoute
+  DashboardWorkerSubmissionsRoute: typeof DashboardWorkerSubmissionsRoute
+  DashboardWorkerTaskListRoute: typeof DashboardWorkerTaskListRoute
+  DashboardWorkerWithdrawalsRoute: typeof DashboardWorkerWithdrawalsRoute
+  DashboardWorkerIndexRoute: typeof DashboardWorkerIndexRoute
+}
+
+const DashboardWorkerRouteRouteChildren: DashboardWorkerRouteRouteChildren = {
+  DashboardWorkerHomeRoute: DashboardWorkerHomeRoute,
+  DashboardWorkerSubmissionsRoute: DashboardWorkerSubmissionsRoute,
+  DashboardWorkerTaskListRoute: DashboardWorkerTaskListRoute,
+  DashboardWorkerWithdrawalsRoute: DashboardWorkerWithdrawalsRoute,
+  DashboardWorkerIndexRoute: DashboardWorkerIndexRoute,
+}
+
+const DashboardWorkerRouteRouteWithChildren =
+  DashboardWorkerRouteRoute._addFileChildren(DashboardWorkerRouteRouteChildren)
+
 interface DashboardRouteRouteChildren {
   DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   DashboardBuyerRouteRoute: typeof DashboardBuyerRouteRouteWithChildren
-  DashboardWorkerRoute: typeof DashboardWorkerRoute
+  DashboardWorkerRouteRoute: typeof DashboardWorkerRouteRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   DashboardBuyerRouteRoute: DashboardBuyerRouteRouteWithChildren,
-  DashboardWorkerRoute: DashboardWorkerRoute,
+  DashboardWorkerRouteRoute: DashboardWorkerRouteRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
