@@ -1,13 +1,6 @@
 import DashboardHeader from '#/components/dashboard/header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import {
-  Home,
-  Plus,
-  ShoppingBag,
-  ClipboardList,
-  Receipt,
-  Icon,
-} from 'lucide-react'
+import { Home, Plus, ShoppingBag, ClipboardList, Receipt } from 'lucide-react'
 import { useState } from 'react'
 import type { RegisteredRouter, LinkProps } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
@@ -40,19 +33,19 @@ const buyer: NavItem = [
     id: 'my-tasks',
     label: 'My tasks',
     icon: ClipboardList,
-    url: { to: '/dashboard/buyer/home' },
+    url: { to: '/dashboard/buyer/my-task' },
   },
   {
     id: 'purchase',
     label: 'Purchase coins',
     icon: ShoppingBag,
-    url: { to: '/dashboard/buyer/home' },
+    url: { to: '/dashboard/buyer/purchase-coins' },
   },
   {
     id: 'payments',
     label: 'Payment history',
     icon: Receipt,
-    url: { to: '/dashboard/buyer/home' },
+    url: { to: '/dashboard/buyer/payment-history' },
   },
 ]
 
