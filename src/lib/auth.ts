@@ -18,6 +18,12 @@ export const auth = betterAuth({
         defaultValue: 'worker',
         input: true,
       },
+      coin: {
+        type: 'number',
+        required: true,
+        defaultValue: 0,
+        input: true,
+      },
     },
   },
   plugins: [tanstackStartCookies()],
