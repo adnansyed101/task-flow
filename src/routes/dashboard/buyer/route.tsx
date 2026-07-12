@@ -24,30 +24,35 @@ type NavItem = {
 }[]
 
 const buyer: NavItem = [
-  { id: 'home', label: 'Home', icon: Home, url: { to: '/dashboard/buyer' } },
+  {
+    id: 'home',
+    label: 'Home',
+    icon: Home,
+    url: { to: '/dashboard/buyer/home' },
+  },
   {
     id: 'add-task',
     label: 'Add new task',
     icon: Plus,
-    url: { to: '/dashboard/buyer' },
+    url: { to: '/dashboard/buyer/add-task' },
   },
   {
     id: 'my-tasks',
     label: 'My tasks',
     icon: ClipboardList,
-    url: { to: '/dashboard/buyer' },
+    url: { to: '/dashboard/buyer/home' },
   },
   {
     id: 'purchase',
     label: 'Purchase coins',
     icon: ShoppingBag,
-    url: { to: '/dashboard/buyer' },
+    url: { to: '/dashboard/buyer/home' },
   },
   {
     id: 'payments',
     label: 'Payment history',
     icon: Receipt,
-    url: { to: '/dashboard/buyer' },
+    url: { to: '/dashboard/buyer/home' },
   },
 ]
 
