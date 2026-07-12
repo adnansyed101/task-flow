@@ -9,7 +9,6 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
-import { auth } from '@/lib/auth' // Your server-side Better Auth instance
 import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 
@@ -19,6 +18,7 @@ interface MyRouterContext {
 
 // 1. Create a server function to fetch the session reliably on the server
 const getSession = createServerFn({ method: 'GET' }).handler(async () => {
+  const { auth } = await import('@/lib/auth')
   const request = getRequest()
   if (!request) return null
 
