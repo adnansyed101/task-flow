@@ -2,21 +2,14 @@ import DashboardHeader from '#/components/dashboard/header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Home, Plus, ShoppingBag, ClipboardList, Receipt } from 'lucide-react'
 import { useState } from 'react'
-import type { RegisteredRouter, LinkProps } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
+import type { NavItem } from '#/lib/schema/general'
 
 export const Route = createFileRoute('/dashboard/buyer')({
   component: BuyerPage,
 })
 
-type NavItem = {
-  id: string
-  label: string
-  icon: React.ElementType
-  url: LinkProps<RegisteredRouter['routeTree']>
-}[]
-
-const buyer: NavItem = [
+const buyer: NavItem[] = [
   {
     id: 'home',
     label: 'Home',
