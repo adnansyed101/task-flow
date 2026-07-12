@@ -14,10 +14,11 @@ import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardWorkerRouteImport } from './routes/dashboard/worker'
-import { Route as DashboardBuyerRouteImport } from './routes/dashboard/buyer'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as DashboardBuyerRouteRouteImport } from './routes/dashboard/buyer/route'
+import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buyer/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -45,11 +46,6 @@ const DashboardWorkerRoute = DashboardWorkerRouteImport.update({
   path: '/worker',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardBuyerRoute = DashboardBuyerRouteImport.update({
-  id: '/buyer',
-  path: '/buyer',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
 const DashboardAdminRoute = DashboardAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -65,6 +61,16 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const DashboardBuyerRouteRoute = DashboardBuyerRouteRouteImport.update({
+  id: '/buyer',
+  path: '/buyer',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardBuyerIndexRoute = DashboardBuyerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardBuyerRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -75,13 +81,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/buyer': typeof DashboardBuyerRoute
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,23 +96,24 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/buyer': typeof DashboardBuyerRoute
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/buyer': typeof DashboardBuyerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/admin': typeof DashboardAdminRoute
-  '/dashboard/buyer': typeof DashboardBuyerRoute
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,13 +121,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/buyer'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/admin'
-    | '/dashboard/buyer'
     | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/buyer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -127,22 +136,23 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/admin'
-    | '/dashboard/buyer'
     | '/dashboard/worker'
     | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard/buyer'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/buyer'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/admin'
-    | '/dashboard/buyer'
     | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/buyer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,13 +199,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWorkerRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/buyer': {
-      id: '/dashboard/buyer'
-      path: '/buyer'
-      fullPath: '/dashboard/buyer'
-      preLoaderRoute: typeof DashboardBuyerRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/dashboard/admin': {
       id: '/dashboard/admin'
       path: '/admin'
@@ -216,6 +219,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/dashboard/buyer': {
+      id: '/dashboard/buyer'
+      path: '/buyer'
+      fullPath: '/dashboard/buyer'
+      preLoaderRoute: typeof DashboardBuyerRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/buyer/': {
+      id: '/dashboard/buyer/'
+      path: '/'
+      fullPath: '/dashboard/buyer/'
+      preLoaderRoute: typeof DashboardBuyerIndexRouteImport
+      parentRoute: typeof DashboardBuyerRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -241,16 +258,27 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DashboardBuyerRouteRouteChildren {
+  DashboardBuyerIndexRoute: typeof DashboardBuyerIndexRoute
+}
+
+const DashboardBuyerRouteRouteChildren: DashboardBuyerRouteRouteChildren = {
+  DashboardBuyerIndexRoute: DashboardBuyerIndexRoute,
+}
+
+const DashboardBuyerRouteRouteWithChildren =
+  DashboardBuyerRouteRoute._addFileChildren(DashboardBuyerRouteRouteChildren)
+
 interface DashboardRouteRouteChildren {
+  DashboardBuyerRouteRoute: typeof DashboardBuyerRouteRouteWithChildren
   DashboardAdminRoute: typeof DashboardAdminRoute
-  DashboardBuyerRoute: typeof DashboardBuyerRoute
   DashboardWorkerRoute: typeof DashboardWorkerRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardBuyerRouteRoute: DashboardBuyerRouteRouteWithChildren,
   DashboardAdminRoute: DashboardAdminRoute,
-  DashboardBuyerRoute: DashboardBuyerRoute,
   DashboardWorkerRoute: DashboardWorkerRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
