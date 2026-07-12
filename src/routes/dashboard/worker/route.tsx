@@ -1,42 +1,41 @@
 import DashboardHeader from '#/components/dashboard/header'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { Home, ClipboardList, Users2, Wallet } from 'lucide-react'
-import { useState } from 'react'
-import { Link } from '@tanstack/react-router'
 import type { NavItem } from '#/lib/schema/general'
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { FileCheck, Home, ListChecks, Wallet } from 'lucide-react'
+import { useState } from 'react'
 
-export const Route = createFileRoute('/dashboard/admin')({
-  component: AdminPages,
+export const Route = createFileRoute('/dashboard/worker')({
+  component: WorkerLayout,
 })
 
-const admin: NavItem[] = [
+const worker: NavItem[] = [
   {
     id: 'home',
     label: 'Home',
     icon: Home,
-    url: { to: '/dashboard/admin/home' },
+    url: { to: '/dashboard/worker/home' },
   },
   {
-    id: 'users',
-    label: 'Manage users',
-    icon: Users2,
-    url: { to: '/dashboard/admin/manage-user' },
+    id: 'tasklist',
+    label: 'Task list',
+    icon: ListChecks,
+    url: { to: '/dashboard/worker/task-list' },
   },
   {
-    id: 'tasks',
-    label: 'Manage tasks',
-    icon: ClipboardList,
-    url: { to: '/dashboard/admin/manage-task' },
+    id: 'submissions',
+    label: 'My submissions',
+    icon: FileCheck,
+    url: { to: '/dashboard/worker/submissions' },
   },
   {
     id: 'withdrawals',
-    label: 'Withdraw requests',
+    label: 'Withdrawals',
     icon: Wallet,
-    url: { to: '/dashboard/admin/withdraw-requests' },
+    url: { to: '/dashboard/worker/withdrawals' },
   },
 ]
 
-function AdminPages() {
+function WorkerLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   return (
     <div className="min-h-screen bg-background">
@@ -50,7 +49,7 @@ function AdminPages() {
           } lg:block lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]`}
         >
           <nav className="rounded-2xl border border-border bg-card p-2">
-            {admin.map((n) => {
+            {worker.map((n) => {
               const Icon = n.icon
               return (
                 <Link
