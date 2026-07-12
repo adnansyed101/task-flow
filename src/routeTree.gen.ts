@@ -17,6 +17,7 @@ import { Route as DashboardWorkerRouteImport } from './routes/dashboard/worker'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as DashboardBuyerRouteRouteImport } from './routes/dashboard/buyer/route'
+import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
 import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buyer/index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin/index'
 import { Route as DashboardBuyerPurchaseCoinsRouteImport } from './routes/dashboard/buyer/purchase-coins'
@@ -24,6 +25,7 @@ import { Route as DashboardBuyerPaymentHistoryRouteImport } from './routes/dashb
 import { Route as DashboardBuyerMyTaskRouteImport } from './routes/dashboard/buyer/my-task'
 import { Route as DashboardBuyerHomeRouteImport } from './routes/dashboard/buyer/home'
 import { Route as DashboardBuyerAddTaskRouteImport } from './routes/dashboard/buyer/add-task'
+import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -66,15 +68,20 @@ const DashboardBuyerRouteRoute = DashboardBuyerRouteRouteImport.update({
   path: '/buyer',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardBuyerIndexRoute = DashboardBuyerIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardBuyerRouteRoute,
 } as any)
 const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => DashboardRouteRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardAdminRouteRoute,
 } as any)
 const DashboardBuyerPurchaseCoinsRoute =
   DashboardBuyerPurchaseCoinsRouteImport.update({
@@ -103,6 +110,11 @@ const DashboardBuyerAddTaskRoute = DashboardBuyerAddTaskRouteImport.update({
   path: '/add-task',
   getParentRoute: () => DashboardBuyerRouteRoute,
 } as any)
+const DashboardAdminHomeRoute = DashboardAdminHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -113,12 +125,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
@@ -135,6 +149,7 @@ export interface FileRoutesByTo {
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
@@ -148,12 +163,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/buyer': typeof DashboardBuyerRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/worker': typeof DashboardWorkerRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/buyer/add-task': typeof DashboardBuyerAddTaskRoute
   '/dashboard/buyer/home': typeof DashboardBuyerHomeRoute
   '/dashboard/buyer/my-task': typeof DashboardBuyerMyTaskRoute
@@ -168,12 +185,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/admin'
     | '/dashboard/buyer'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/admin/home'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
@@ -190,6 +209,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker'
     | '/dashboard'
     | '/api/auth/$'
+    | '/dashboard/admin/home'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
@@ -202,12 +222,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/admin'
     | '/dashboard/buyer'
     | '/auth/login'
     | '/auth/register'
     | '/dashboard/worker'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/dashboard/admin/home'
     | '/dashboard/buyer/add-task'
     | '/dashboard/buyer/home'
     | '/dashboard/buyer/my-task'
@@ -282,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardBuyerRouteRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/buyer/': {
       id: '/dashboard/buyer/'
       path: '/'
@@ -291,10 +320,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/admin/': {
       id: '/dashboard/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+      parentRoute: typeof DashboardAdminRouteRoute
     }
     '/dashboard/buyer/purchase-coins': {
       id: '/dashboard/buyer/purchase-coins'
@@ -331,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardBuyerAddTaskRouteImport
       parentRoute: typeof DashboardBuyerRouteRoute
     }
+    '/dashboard/admin/home': {
+      id: '/dashboard/admin/home'
+      path: '/home'
+      fullPath: '/dashboard/admin/home'
+      preLoaderRoute: typeof DashboardAdminHomeRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -355,6 +391,19 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface DashboardAdminRouteRouteChildren {
+  DashboardAdminHomeRoute: typeof DashboardAdminHomeRoute
+  DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
+}
+
+const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
+  DashboardAdminHomeRoute: DashboardAdminHomeRoute,
+  DashboardAdminIndexRoute: DashboardAdminIndexRoute,
+}
+
+const DashboardAdminRouteRouteWithChildren =
+  DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
+
 interface DashboardBuyerRouteRouteChildren {
   DashboardBuyerAddTaskRoute: typeof DashboardBuyerAddTaskRoute
   DashboardBuyerHomeRoute: typeof DashboardBuyerHomeRoute
@@ -377,17 +426,17 @@ const DashboardBuyerRouteRouteWithChildren =
   DashboardBuyerRouteRoute._addFileChildren(DashboardBuyerRouteRouteChildren)
 
 interface DashboardRouteRouteChildren {
+  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   DashboardBuyerRouteRoute: typeof DashboardBuyerRouteRouteWithChildren
   DashboardWorkerRoute: typeof DashboardWorkerRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
-  DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   DashboardBuyerRouteRoute: DashboardBuyerRouteRouteWithChildren,
   DashboardWorkerRoute: DashboardWorkerRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-  DashboardAdminIndexRoute: DashboardAdminIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
