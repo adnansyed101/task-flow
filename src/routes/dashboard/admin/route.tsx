@@ -1,13 +1,6 @@
 import DashboardHeader from '#/components/dashboard/header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import {
-  Home,
-  Plus,
-  ShoppingBag,
-  ClipboardList,
-  Receipt,
-  Users2,
-} from 'lucide-react'
+import { Home, ClipboardList, Users2, Wallet } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import type { NavItem } from '#/lib/schema/general'
@@ -15,26 +8,6 @@ import type { NavItem } from '#/lib/schema/general'
 export const Route = createFileRoute('/dashboard/admin')({
   component: AdminPages,
 })
-
-// worker: [
-//     { id: "home", label: "Home", icon: Home },
-//     { id: "tasklist", label: "Task list", icon: ListChecks },
-//     { id: "submissions", label: "My submissions", icon: FileCheck },
-//     { id: "withdrawals", label: "Withdrawals", icon: Wallet },
-//   ],
-//   buyer: [
-//     { id: "home", label: "Home", icon: Home },
-//     { id: "add-task", label: "Add new task", icon: Plus },
-//     { id: "my-tasks", label: "My tasks", icon: ClipboardList },
-//     { id: "purchase", label: "Purchase coins", icon: ShoppingBag },
-//     { id: "payments", label: "Payment history", icon: Receipt },
-//   ],
-//   admin: [
-//     { id: "home", label: "Home", icon: Home },
-//     { id: "users", label: "Manage users", icon: Users2 },
-//     { id: "tasks", label: "Manage tasks", icon: ClipboardList },
-//     { id: "withdrawals", label: "Withdraw requests", icon: Wallet },
-//   ],
 
 const admin: NavItem[] = [
   {
@@ -50,21 +23,15 @@ const admin: NavItem[] = [
     url: { to: '/dashboard/admin/home' },
   },
   {
-    id: 'my-tasks',
-    label: 'My tasks',
+    id: 'tasks',
+    label: 'Manage tasks',
     icon: ClipboardList,
     url: { to: '/dashboard/admin/home' },
   },
   {
-    id: 'purchase',
-    label: 'Purchase coins',
-    icon: ShoppingBag,
-    url: { to: '/dashboard/admin/home' },
-  },
-  {
-    id: 'payments',
-    label: 'Payment history',
-    icon: Receipt,
+    id: 'withdrawals',
+    label: 'Withdraw requests',
+    icon: Wallet,
     url: { to: '/dashboard/admin/home' },
   },
 ]
