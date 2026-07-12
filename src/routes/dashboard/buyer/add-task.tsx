@@ -2,9 +2,25 @@ import SectionHeader from '#/components/dashboard/section-header'
 import { Button } from '#/components/ui/button'
 import { Card } from '#/components/ui/card'
 import { Input } from '#/components/ui/input'
-import { Label } from '#/components/ui/label'
 import { Textarea } from '#/components/ui/textarea'
 import { createFileRoute } from '@tanstack/react-router'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
+import { taskConstant } from '#/lib/constants'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '#/components/ui/field'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '#/components/ui/popover'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '#/components/ui/calendar'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
@@ -16,9 +32,19 @@ function AddTaskPage() {
     throw new Error('No session found in add task page')
   }
 
-  function submit() {
-    console.log('submit')
+  const form = useForm<FormTaskValuesType>({
+    resolver: zodResolver(FormTaskSchema),
+    defaultValues: { ...taskConstant, buyerId: session.user.id },
+  })
+
+  function onSubmit(data: FormTaskValuesType) {
+    console.log(data)
   }
+
+  const requiredWorkers = form.watch('requiredWorkers')
+  const payableAmount = form.watch('payableAmount')
+
+  const total = requiredWorkers * payableAmount
 
   return (
     <>
@@ -27,95 +53,212 @@ function AddTaskPage() {
         subtitle="Describe the work, set your reward, and reach thousands of workers."
       />
 
-      <form onSubmit={submit} className="grid gap-4 lg:grid-cols-2">
-        <Card className="p-6 lg:col-span-2">
-          <Label>Task title</Label>
-          <Input
-            required
-            // value={f.title}
-            // onChange={(e) => setF({ ...f, title: e.target.value })}
-            className="mt-1.5"
-            placeholder="e.g. Watch my YouTube video and leave a comment"
+      <form onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}>
+        <FieldGroup className="grid gap-4 lg:grid-cols-2">
+          <Controller
+            name="taskTitle"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6 lg:col-span-2">
+                <Field>
+                  <FieldLabel htmlFor="taskTitle">Task Title</FieldLabel>
+                  <Input
+                    id="taskTitle"
+                    {...field}
+                    required
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Enter Task Title"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6 lg:col-span-2">
-          <Label>Task detail</Label>
-          <Textarea
-            required
-            rows={4}
-            // value={f.detail}
-            // onChange={(e) => setF({ ...f, detail: e.target.value })}
-            className="mt-1.5"
-            placeholder="Explain exactly what the worker needs to do."
+
+          <Controller
+            name="taskDetail"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6 lg:col-span-2">
+                <Field>
+                  <FieldLabel htmlFor="taskDetail">Task Details</FieldLabel>
+                  <Textarea
+                    rows={6}
+                    id="taskDetail"
+                    {...field}
+                    required
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Enter Task Details"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6">
-          <Label>Required workers</Label>
-          <Input
-            type="number"
-            min={1}
-            // value={f.requiredWorkers}
-            // onChange={(e) =>
-            //   setF({ ...f, requiredWorkers: Number(e.target.value) })
-            // }
-            className="mt-1.5"
+
+          <Controller
+            name="requiredWorkers"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6">
+                <Field>
+                  <FieldLabel htmlFor="requiredWorkers">
+                    Required Workers
+                  </FieldLabel>
+                  <Input
+                    type="number"
+                    min={1}
+                    id="requiredWorkers"
+                    {...field}
+                    required
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Enter number of workers required."
+                    autoComplete="off"
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6">
-          <Label>Payable amount (coins each)</Label>
-          <Input
-            type="number"
-            min={1}
-            // value={f.payableAmount}
-            // onChange={(e) =>
-            //   setF({ ...f, payableAmount: Number(e.target.value) })
-            // }
-            className="mt-1.5"
+          <Controller
+            name="payableAmount"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6">
+                <Field>
+                  <FieldLabel htmlFor="payableAmount">
+                    Payable Amount
+                  </FieldLabel>
+                  <Input
+                    type="number"
+                    min={1}
+                    id="payableAmount"
+                    {...field}
+                    required
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Enter Task Details"
+                    autoComplete="off"
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6">
-          <Label>Completion date</Label>
-          <Input
-            type="date"
-            // value={f.completionDate}
-            // onChange={(e) => setF({ ...f, completionDate: e.target.value })}
-            className="mt-1.5"
+          <Controller
+            name="completionDate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6">
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    htmlFor="completionDate"
+                    className="text-sm font-medium"
+                  >
+                    Completion Data
+                  </FieldLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button type="button" variant={'outline'}>
+                        {field.value.toLocaleDateString()}
+                        <CalendarIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        required
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6">
-          <Label>Task image URL</Label>
-          <Input
-            // value={f.imageUrl}
-            // onChange={(e) => setF({ ...f, imageUrl: e.target.value })}
-            className="mt-1.5"
-            placeholder="Optional — link to a preview image"
+
+          <Controller
+            name="taskImageUrl"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6">
+                <Field>
+                  <FieldLabel htmlFor="taskImageUrl">Task Image URL</FieldLabel>
+                  <Input
+                    id="taskImageUrl"
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Optional — link to a preview image"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="p-6 lg:col-span-2">
-          <Label>Submission info</Label>
-          <Textarea
-            required
-            rows={2}
-            // value={f.submissionInfo}
-            // onChange={(e) => setF({ ...f, submissionInfo: e.target.value })}
-            className="mt-1.5"
-            placeholder="What proof do you need? (e.g. screenshot with visible username)"
+          <Controller
+            name="submissionInfo"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Card className="p-6 lg:col-span-2">
+                <Field>
+                  <FieldLabel htmlFor="submissionInfo">
+                    Submission Info
+                  </FieldLabel>
+                  <Textarea
+                    rows={2}
+                    id="submissionInfo"
+                    {...field}
+                    required
+                    aria-invalid={fieldState.invalid}
+                    placeholder="What proof do you need? (e.g. screenshot with visible username)"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              </Card>
+            )}
           />
-        </Card>
-        <Card className="flex flex-wrap items-center justify-between gap-4 p-6 lg:col-span-2">
-          <div>
-            <div className="text-xs uppercase text-muted-foreground">
-              Total cost
+          <Card className="flex flex-row items-center justify-between gap-4 p-6 lg:col-span-2">
+            <div>
+              <div className="text-xs uppercase text-muted-foreground">
+                Total cost
+              </div>
+              <div className="font-display text-3xl">{total} coins</div>
+              <div className="text-xs text-muted-foreground">
+                You have {session.user.coin} available
+              </div>
             </div>
-            <div className="font-display text-3xl">{100} coins</div>
-            <p className="text-xs text-muted-foreground">
-              You have {session.user.coin} available
-            </p>
-          </div>
-          <Button size="lg" type="submit" className="rounded-full">
-            Post task
-          </Button>
-        </Card>
+            <div>
+              <Button size="lg" type="submit" className="rounded-full">
+                Post task
+              </Button>
+            </div>
+          </Card>
+        </FieldGroup>
       </form>
     </>
   )
