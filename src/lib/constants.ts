@@ -1,4 +1,5 @@
 import type { LoginType, RegistrationType } from './schema/registration'
+import type { FormTaskValuesType } from './schema/task'
 
 export const registrationConstant: RegistrationType = {
   fullName: '',
@@ -12,4 +13,17 @@ export const registrationConstant: RegistrationType = {
 export const loginConstant: LoginType = {
   email: '',
   password: '',
+}
+
+export const taskConstant: FormTaskValuesType = {
+  id: '',
+  taskTitle: '',
+  taskDetail: '',
+  requiredWorkers: 0,
+  payableAmount: 0.0,
+  completionDate: new Date(), // Defaults to current date/time
+  submissionInfo: '',
+  taskImageUrl: '',
+  buyerId: '',
+  status: 'pending',
 }
