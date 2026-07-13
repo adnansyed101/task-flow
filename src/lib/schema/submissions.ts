@@ -9,7 +9,7 @@ const baseSubmissionSchema = z.object({
   workerEmail: z.string().email(), // Added .email() validation for safety
   workerName: z.string(),
   submissionDetails: z.string(),
-  currentDate: z.string(), // Assumes ISO string or formatted date string
+  currentDate: z.date(), // Assumes ISO string or formatted date string
   status: z.union([
     z.literal('pending'),
     z.literal('approved'),
