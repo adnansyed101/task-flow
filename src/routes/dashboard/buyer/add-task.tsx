@@ -22,6 +22,8 @@ import {
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '#/components/ui/calendar'
 import { createTask } from '#/lib/actions/task.actions'
+import { Spinner } from '#/components/ui/spinner'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
@@ -38,7 +40,10 @@ function AddTaskPage() {
   async function onSubmit(data: FormTaskValuesType) {
     const task = await createTask({ data })
 
-    console.log(task)
+    if (task) {
+      toast.success('Task posted successfully')
+      form.reset()
+    }
   }
 
   const requiredWorkers = form.watch('requiredWorkers')
@@ -251,8 +256,14 @@ function AddTaskPage() {
               </div>
             </div>
             <div>
-              <Button size="lg" type="submit" className="rounded-full">
-                Post task
+              <Button
+                size="lg"
+                type="submit"
+                className="rounded-full"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting && <Spinner />}
+                {form.formState.isSubmitting ? 'Posting task' : 'Post task'}
               </Button>
             </div>
           </Card>
