@@ -22,7 +22,26 @@ async function main() {
     body: {
       email: 'admin@microtask.io',
       password: 'Admin@123',
-      name: 'System Admin',
+      name: 'Admin System',
+      role: Role.admin,
+    },
+  })
+
+  await auth.api.signUpEmail({
+    body: {
+      email: 'buyer@microtask.io',
+      password: 'Admin@123',
+      name: 'Buyer System',
+      role: Role.buyer,
+    },
+  })
+
+  await auth.api.signUpEmail({
+    body: {
+      email: 'worker@microtask.io',
+      password: 'Admin@123',
+      name: 'Woker System',
+      role: Role.worker,
     },
   })
 
