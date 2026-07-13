@@ -1,6 +1,5 @@
 import SectionHeader from '#/components/dashboard/section-header'
 import StatCard from '#/components/dashboard/stat-card'
-import StatusBadge from '#/components/dashboard/status-badge'
 import { Button } from '#/components/ui/button'
 import { Card } from '#/components/ui/card'
 import {
@@ -26,7 +25,7 @@ export const Route = createFileRoute('/dashboard/buyer/home')({
 })
 
 function BuyerHomePage() {
-  const { session } = Route.useRouteContext()
+  const session = Route.useRouteContext()
 
   if (!session) {
     throw new Error('No session found in buyer home page')

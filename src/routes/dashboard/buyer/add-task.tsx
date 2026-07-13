@@ -27,10 +27,7 @@ export const Route = createFileRoute('/dashboard/buyer/add-task')({
 })
 
 function AddTaskPage() {
-  const { session } = Route.useRouteContext()
-  if (!session) {
-    throw new Error('No session found in add task page')
-  }
+  const session = Route.useRouteContext()
 
   const form = useForm<FormTaskValuesType>({
     resolver: zodResolver(FormTaskSchema),

@@ -1,11 +1,23 @@
 import DashboardHeader from '#/components/dashboard/header'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Home, ClipboardList, Users2, Wallet } from 'lucide-react'
 import { useState } from 'react'
 import type { NavItem } from '#/lib/schema/general'
 import Sidebar from '#/components/dashboard/sidebar'
+import { ensureSession } from '#/middleware/auth.function'
 
 export const Route = createFileRoute('/dashboard/admin')({
+  beforeLoad: async () => {
+    const session = await ensureSession()
+
+    if (session.user.role !== 'admin') {
+      throw redirect({
+        to: '/dashboard',
+      })
+    }
+
+    return session
+  },
   component: AdminPages,
 })
 

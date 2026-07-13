@@ -33,7 +33,6 @@ function LoginPage() {
   })
 
   async function onSubmit(formData: LoginType) {
-    console.log(formData)
     await authClient.signIn.email(
       {
         email: formData.email, // user email address

@@ -1,11 +1,23 @@
 import DashboardHeader from '#/components/dashboard/header'
 import Sidebar from '#/components/dashboard/sidebar'
 import type { NavItem } from '#/lib/schema/general'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { ensureSession } from '#/middleware/auth.function'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { FileCheck, Home, ListChecks, Wallet } from 'lucide-react'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/dashboard/worker')({
+  beforeLoad: async () => {
+    const session = await ensureSession()
+
+    if (session.user.role !== 'worker') {
+      throw redirect({
+        to: '/dashboard',
+      })
+    }
+
+    return session
+  },
   component: WorkerLayout,
 })
 

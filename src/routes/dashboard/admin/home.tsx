@@ -17,7 +17,7 @@ export const Route = createFileRoute('/dashboard/admin/home')({
 })
 
 function DashboardPage() {
-  const { session } = Route.useRouteContext()
+  const session = Route.useRouteContext()
 
   if (!session) {
     throw new Error('No session found in buyer home page')
