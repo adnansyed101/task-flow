@@ -51,6 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Task: 'Task',
+  Submission: 'Submission',
+  Withdrawal: 'Withdrawal',
+  Payment: 'Payment',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
@@ -71,6 +75,62 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const TaskScalarFieldEnum = {
+  id: 'id',
+  taskTitle: 'taskTitle',
+  taskDetail: 'taskDetail',
+  requiredWorkers: 'requiredWorkers',
+  payableAmount: 'payableAmount',
+  completionDate: 'completionDate',
+  submissionInfo: 'submissionInfo',
+  taskImageUrl: 'taskImageUrl',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  buyerId: 'buyerId'
+} as const
+
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
+
+
+export const SubmissionScalarFieldEnum = {
+  id: 'id',
+  submissionDetails: 'submissionDetails',
+  currentDate: 'currentDate',
+  status: 'status',
+  taskId: 'taskId',
+  workerId: 'workerId'
+} as const
+
+export type SubmissionScalarFieldEnum = (typeof SubmissionScalarFieldEnum)[keyof typeof SubmissionScalarFieldEnum]
+
+
+export const WithdrawalScalarFieldEnum = {
+  id: 'id',
+  withdrawalCoin: 'withdrawalCoin',
+  withdrawalAmount: 'withdrawalAmount',
+  paymentSystem: 'paymentSystem',
+  accountNumber: 'accountNumber',
+  status: 'status',
+  withdrawDate: 'withdrawDate',
+  workerId: 'workerId'
+} as const
+
+export type WithdrawalScalarFieldEnum = (typeof WithdrawalScalarFieldEnum)[keyof typeof WithdrawalScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  coinsBought: 'coinsBought',
+  paymentDate: 'paymentDate',
+  transactionId: 'transactionId',
+  buyerId: 'buyerId'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

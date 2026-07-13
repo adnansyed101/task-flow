@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -6,6 +5,76 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum TaskStatus {
+  pending
+  approved
+  rejected
+}
+
+enum Role {
+  worker
+  buyer
+  admin
+}
+
+model Task {
+  id              String     @id @default(uuid()) // or @default(cuid()) depending on your ID preference
+  taskTitle       String
+  taskDetail      String
+  requiredWorkers Int
+  payableAmount   Float // Maps to Zod's z.number()
+  completionDate  DateTime // Maps to Zod's z.date()
+  submissionInfo  String
+  taskImageUrl    String
+  status          TaskStatus @default(pending)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // --- Relations ---
+  buyerId     String
+  buyer       User         @relation("BuyerTasks", fields: [buyerId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+}
+
+model Submission {
+  id                String     @id @default(cuid())
+  submissionDetails String
+  currentDate       DateTime   @default(now())
+  status            TaskStatus @default(pending)
+
+  // Relations
+  taskId   String
+  task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  workerId String
+  worker   User   @relation("WorkerSubmissions", fields: [workerId], references: [id], onDelete: Cascade)
+}
+
+model Withdrawal {
+  id               String     @id @default(cuid())
+  withdrawalCoin   Int
+  withdrawalAmount Float // In Dollars ($) [source: 1]
+  paymentSystem    String // Bkash, Rocket, Nagad [source: 1]
+  accountNumber    String
+  status           TaskStatus @default(pending)
+  withdrawDate     DateTime   @default(now())
+
+  // Relations
+  workerId String
+  worker   User   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id            String   @id @default(cuid())
+  amount        Float // Dollars paid [source: 1]
+  coinsBought   Int
+  paymentDate   DateTime @default(now())
+  transactionId String   @unique
+
+  // Relations
+  buyerId String
+  buyer   User   @relation(fields: [buyerId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -22,6 +91,12 @@ model User {
   banExpires    DateTime?
   sessions      Session[]
   accounts      Account[]
+
+  // Relations
+  tasks       Task[]       @relation("BuyerTasks")
+  submissions Submission[] @relation("WorkerSubmissions")
+  withdrawals Withdrawal[]
+  payments    Payment[]
 
   coin Int @default(0)
 

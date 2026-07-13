@@ -8,6 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Task.ts'
+export type * from './models/Submission.ts'
+export type * from './models/Withdrawal.ts'
+export type * from './models/Payment.ts'
 export type * from './models/User.ts'
 export type * from './models/Session.ts'
 export type * from './models/Account.ts'
