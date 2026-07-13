@@ -21,6 +21,7 @@ import {
 } from '#/components/ui/popover'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '#/components/ui/calendar'
+import { createTask } from '#/lib/actions/task.actions'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
@@ -34,8 +35,10 @@ function AddTaskPage() {
     defaultValues: { ...taskConstant, buyerId: session.user.id },
   })
 
-  function onSubmit(data: FormTaskValuesType) {
-    console.log(data)
+  async function onSubmit(data: FormTaskValuesType) {
+    const task = await createTask({ data })
+
+    console.log(task)
   }
 
   const requiredWorkers = form.watch('requiredWorkers')
@@ -163,7 +166,7 @@ function AddTaskPage() {
                     htmlFor="completionDate"
                     className="text-sm font-medium"
                   >
-                    Completion Data
+                    Completion Date
                   </FieldLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -178,9 +181,7 @@ function AddTaskPage() {
                         required
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
+                        disabled={{ before: new Date() }}
                         captionLayout="dropdown"
                       />
                     </PopoverContent>
