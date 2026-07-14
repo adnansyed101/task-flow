@@ -17,14 +17,8 @@ import {
   TableRow,
 } from '#/components/ui/table'
 import { Textarea } from '#/components/ui/textarea'
-import { getTasks } from '#/lib/actions/actions'
 import { taskConstant, taskKey } from '#/lib/constants'
-import {
-  FormTaskSchema,
-  type FormTaskValuesType,
-  type ResponseTaskType,
-} from '#/lib/schema/task'
-import { ensureSession } from '#/middleware/auth.function'
+import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
 import { createFileRoute } from '@tanstack/react-router'
 import { format } from 'date-fns'
 import { useState } from 'react'
@@ -40,55 +34,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import z from 'zod'
 import { toast } from 'sonner'
-import { prisma } from '#/db'
-
-const fetchTasksParamsSchema = z.object({
-  buyerId: z.string(),
-})
 
 export const Route = createFileRoute('/dashboard/buyer/my-task')({
   component: MyTasks,
-  server: {
-    handlers: {
-      GET: async () => {
-        const session = await ensureSession()
-        try {
-          const tasks = await prisma.task.findMany({
-            where: {
-              buyerId: session.user.id,
-            },
-          })
-
-          return Response.json({
-            success: true,
-            data: tasks,
-            message: 'Task Created Successfully.',
-          })
-        } catch (error) {
-          // z.parse() throws a ZodError if validation fails
-          if (error instanceof z.ZodError) {
-            return Response.json(
-              {
-                success: false,
-                error: error.issues,
-                message: 'Zod Error',
-              },
-              { status: 400 },
-            )
-          }
-
-          // Handle database or other unexpected errors
-          return Response.json(
-            {
-              success: false,
-              error: 'Internal server error in creating tasks.',
-            },
-            { status: 400 },
-          )
-        }
-      },
-    },
-  },
 })
 
 type TasksResponseType = {
@@ -112,7 +60,7 @@ function MyTasks() {
     queryKey: [taskKey],
     queryFn: async (): Promise<TasksResponseType> => {
       try {
-        const response = await axios.patch('/api/task')
+        const response = await axios.get('/api/task')
         return response.data
       } catch (error) {
         // Handle database or other unexpected errors
@@ -175,15 +123,16 @@ function MyTasks() {
   })
 
   const handleOpenDialog = (item: FormTaskValuesType) => {
+    item.completionDate = new Date(item.completionDate)
     setSelectedItem(item)
+    console.log(item)
     setIsOpen(true)
   }
 
   function onSubmit(taskData: FormTaskValuesType) {
     console.log(taskData)
+    updateTaskMutation.mutate(taskData)
   }
-
-  console.log(tasks)
 
   return (
     <>
@@ -225,6 +174,7 @@ function MyTasks() {
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
+                    disabled={deleteMutation.isPending}
                     onClick={() => {
                       deleteMutation.mutate(t.id)
                     }}
@@ -235,7 +185,7 @@ function MyTasks() {
               </TableRow>
             ))}
 
-            {/* {sorted.length === 0 && (
+            {tasks?.data.length === 0 && (
               <TableRow>
                 <TableCell
                   colSpan={5}
@@ -244,7 +194,7 @@ function MyTasks() {
                   You haven't posted any tasks yet.
                 </TableCell>
               </TableRow>
-            )} */}
+            )}
           </TableBody>
         </Table>
       </Card>
@@ -254,7 +204,10 @@ function MyTasks() {
           <DialogHeader>
             <DialogTitle>Update task</DialogTitle>
           </DialogHeader>
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            className="space-y-4"
+            onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}
+          >
             <FieldGroup>
               <Controller
                 name="taskTitle"
@@ -322,7 +275,9 @@ function MyTasks() {
               />
             </FieldGroup>
 
-            <Button className="rounded-full">Save changes</Button>
+            <Button className="rounded-full" type="submit">
+              Save changes
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
