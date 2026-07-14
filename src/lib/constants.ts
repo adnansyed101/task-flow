@@ -16,7 +16,6 @@ export const loginConstant: LoginType = {
 }
 
 export const taskConstant: FormTaskValuesType = {
-  id: '',
   taskTitle: '',
   taskDetail: '',
   requiredWorkers: 0,
@@ -27,3 +26,5 @@ export const taskConstant: FormTaskValuesType = {
   buyerId: '',
   status: 'pending',
 }
+
+export const taskKey = 'create-task'
