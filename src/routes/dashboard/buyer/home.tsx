@@ -19,16 +19,40 @@ import {
 } from '#/components/ui/table'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { submissionsKey } from '#/lib/constants'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import type { ResponseSubmissionType } from '#/lib/schema/submissions'
+import { Spinner } from '#/components/ui/spinner'
 
 export const Route = createFileRoute('/dashboard/buyer/home')({
   component: BuyerHomePage,
 })
 
+type SubmissionResponseType = {
+  data: ResponseSubmissionType[]
+  message: string
+  success: boolean
+}
+
 function BuyerHomePage() {
   const session = Route.useRouteContext()
 
-  if (!session) {
-    throw new Error('No session found in buyer home page')
+  const submissions = useQuery({
+    queryKey: [submissionsKey],
+    queryFn: async (): Promise<SubmissionResponseType> => {
+      try {
+        const response = await axios.get('/api/submission')
+        return response.data
+      } catch (error) {
+        // Handle database or other unexpected errors
+        return { success: false, message: 'Internal server error', data: [] }
+      }
+    },
+  })
+
+  if (submissions.isError) {
+    return <>Some error</>
   }
 
   return (
@@ -51,24 +75,37 @@ function BuyerHomePage() {
                 <TableHead>Worker</TableHead>
                 <TableHead>Task</TableHead>
                 <TableHead>Payable</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* {mySubs
-                .filter((s) => s.status === 'pending')
-                .map((s) => (
-                  <ReviewRow key={s.id} sub={s} />
-                ))} */}
+              {submissions.isLoading || submissions.isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={2}></TableCell>
+                  <TableCell className="flex justify-center">
+                    <Spinner />
+                  </TableCell>
+                  <TableCell colSpan={2}></TableCell>
+                </TableRow>
+              ) : (
+                <>
+                  {submissions.data?.data.map((s) => (
+                    <ReviewRow key={s.id} sub={s} />
+                  ))}
 
-              <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="py-8 text-center text-sm text-muted-foreground"
-                >
-                  No submissions waiting for review.
-                </TableCell>
-              </TableRow>
+                  {submissions.data?.data.length === 0 && (
+                    <TableRow>
+                      <TableCell
+                        colSpan={5}
+                        className="py-8 text-center text-sm text-muted-foreground"
+                      >
+                        No submissions waiting for review.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
+              )}
             </TableBody>
           </Table>
         </Card>
@@ -77,14 +114,17 @@ function BuyerHomePage() {
   )
 }
 
-function ReviewRow({ sub }: { sub: any }) {
+function ReviewRow({ sub }: { sub: ResponseSubmissionType }) {
   const [open, setOpen] = useState(false)
   return (
     <>
       <TableRow>
-        <TableCell className="font-medium">{sub.workerName}</TableCell>
-        <TableCell className="max-w-xs truncate">{sub.taskTitle}</TableCell>
-        <TableCell>{sub.payableAmount} coins</TableCell>
+        <TableCell className="font-medium">{sub.worker.name}</TableCell>
+        <TableCell className="max-w-xs truncate">
+          {sub.task.taskTitle}
+        </TableCell>
+        <TableCell>{sub.task.payableAmount} coins</TableCell>
+        <TableCell>{sub.status}</TableCell>
         <TableCell className="text-right">
           <div className="inline-flex gap-2">
             <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
@@ -107,8 +147,8 @@ function ReviewRow({ sub }: { sub: any }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Submission from {sub.workerName}</DialogTitle>
-            <DialogDescription>{sub.taskTitle}</DialogDescription>
+            <DialogTitle>Submission from {sub.worker.name}</DialogTitle>
+            <DialogDescription>{sub.task.taskTitle}</DialogDescription>
           </DialogHeader>
           <div className="rounded-lg border border-border bg-muted p-4 text-sm whitespace-pre-wrap">
             {sub.submissionDetails}
