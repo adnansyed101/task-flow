@@ -28,9 +28,52 @@ import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import z from 'zod'
 import { format } from 'date-fns'
+import { prisma } from '#/db'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
+  server: {
+    handlers: {
+      POST: async ({ request }: { request: Request }) => {
+        try {
+          const body = await request.json()
+          body.completionDate = new Date(body.completionDate)
+          const { id, ...vlaidatedData } = FormTaskSchema.parse(body)
+
+          const newTask = await prisma.task.create({
+            data: vlaidatedData,
+          })
+
+          return Response.json({
+            success: true,
+            data: newTask,
+            message: 'Task Created Successfully.',
+          })
+        } catch (error: any) {
+          // z.parse() throws a ZodError if validation fails
+          if (error instanceof z.ZodError) {
+            return Response.json(
+              {
+                success: false,
+                error: error.issues,
+                message: 'Zod Error',
+              },
+              { status: 400 },
+            )
+          }
+
+          // Handle database or other unexpected errors
+          return Response.json(
+            {
+              success: false,
+              error: 'Internal server error in creating tasks.',
+            },
+            { status: 400 },
+          )
+        }
+      },
+    },
+  },
 })
 
 function AddTaskPage() {
@@ -46,7 +89,10 @@ function AddTaskPage() {
   const createTaskMutation = useMutation({
     mutationFn: async (newTaskData: FormTaskValuesType) => {
       try {
-        const response = await axios.post('/api/task', newTaskData)
+        const response = await axios.post(
+          '/dashboard/buyer/add-task',
+          newTaskData,
+        )
         return response.data
       } catch (error) {
         // z.parse() throws a ZodError if validation fails

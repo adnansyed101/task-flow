@@ -19,7 +19,11 @@ import {
 import { Textarea } from '#/components/ui/textarea'
 import { getTasks } from '#/lib/actions/actions'
 import { taskConstant, taskKey } from '#/lib/constants'
-import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
+import {
+  FormTaskSchema,
+  type FormTaskValuesType,
+  type ResponseTaskType,
+} from '#/lib/schema/task'
 import { ensureSession } from '#/middleware/auth.function'
 import { createFileRoute } from '@tanstack/react-router'
 import { format } from 'date-fns'
@@ -32,30 +36,89 @@ import {
   FieldGroup,
   FieldLabel,
 } from '#/components/ui/field'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import z from 'zod'
 import { toast } from 'sonner'
+import { prisma } from '#/db'
+
+const fetchTasksParamsSchema = z.object({
+  buyerId: z.string(),
+})
 
 export const Route = createFileRoute('/dashboard/buyer/my-task')({
   component: MyTasks,
-  loader: async () => {
-    const session = await ensureSession()
-    const tasks = await getTasks({ data: { buyerId: session.user.id } })
-    return tasks
+  server: {
+    handlers: {
+      GET: async () => {
+        const session = await ensureSession()
+        try {
+          const tasks = await prisma.task.findMany({
+            where: {
+              buyerId: session.user.id,
+            },
+          })
+
+          return Response.json({
+            success: true,
+            data: tasks,
+            message: 'Task Created Successfully.',
+          })
+        } catch (error) {
+          // z.parse() throws a ZodError if validation fails
+          if (error instanceof z.ZodError) {
+            return Response.json(
+              {
+                success: false,
+                error: error.issues,
+                message: 'Zod Error',
+              },
+              { status: 400 },
+            )
+          }
+
+          // Handle database or other unexpected errors
+          return Response.json(
+            {
+              success: false,
+              error: 'Internal server error in creating tasks.',
+            },
+            { status: 400 },
+          )
+        }
+      },
+    },
   },
 })
+
+type TasksResponseType = {
+  data: FormTaskValuesType[]
+  message: string
+  success: boolean
+}
 
 function MyTasks() {
   const [selectedItem, setSelectedItem] =
     useState<FormTaskValuesType>(taskConstant)
   const [isOpen, setIsOpen] = useState(false)
-  const tasks = Route.useLoaderData()
   const queryClient = useQueryClient()
 
   const form = useForm<FormTaskValuesType>({
     resolver: zodResolver(FormTaskSchema),
     values: selectedItem,
+  })
+
+  const { data: tasks } = useQuery({
+    queryKey: [taskKey],
+    queryFn: async (): Promise<TasksResponseType> => {
+      try {
+        const response = await axios.patch('/api/task')
+        return response.data
+      } catch (error) {
+        // Handle database or other unexpected errors
+        return { success: false, message: 'Internal server error', data: [] }
+      }
+    },
   })
 
   // Mutation to create task.
@@ -120,6 +183,8 @@ function MyTasks() {
     console.log(taskData)
   }
 
+  console.log(tasks)
+
   return (
     <>
       <SectionHeader
@@ -138,7 +203,7 @@ function MyTasks() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tasks.map((t) => (
+            {tasks?.data.map((t) => (
               <TableRow key={t.id}>
                 <TableCell className="max-w-md truncate font-medium">
                   {t.taskTitle}

@@ -6,7 +6,7 @@ import z from 'zod'
 export const Route = createFileRoute('/api/task/')({
   server: {
     handlers: {
-      POST: async ({ request }: { request: Request }) => {
+      POST: async ({ request }) => {
         try {
           const body = await request.json()
           body.completionDate = new Date(body.completionDate)
@@ -33,8 +33,6 @@ export const Route = createFileRoute('/api/task/')({
               { status: 400 },
             )
           }
-
-          console.log(error)
 
           // Handle database or other unexpected errors
           return Response.json(
