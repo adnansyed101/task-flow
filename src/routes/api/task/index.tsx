@@ -22,18 +22,6 @@ export const Route = createFileRoute('/api/task/')({
             message: 'Task Created Successfully.',
           })
         } catch (error) {
-          // z.parse() throws a ZodError if validation fails
-          if (error instanceof z.ZodError) {
-            return Response.json(
-              {
-                success: false,
-                error: error.issues,
-                message: 'Zod Error',
-              },
-              { status: 400 },
-            )
-          }
-
           // Handle database or other unexpected errors
           return Response.json(
             {
