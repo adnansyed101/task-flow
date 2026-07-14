@@ -27,6 +27,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import z from 'zod'
+import { format } from 'date-fns'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
@@ -45,8 +46,7 @@ function AddTaskPage() {
   const createTaskMutation = useMutation({
     mutationFn: async (newTaskData: FormTaskValuesType) => {
       try {
-        const validatedData = FormTaskSchema.parse(newTaskData)
-        const response = await axios.post('/api/task', validatedData)
+        const response = await axios.post('/api/task', newTaskData)
         return response.data
       } catch (error) {
         // z.parse() throws a ZodError if validation fails
@@ -55,16 +55,20 @@ function AddTaskPage() {
         }
 
         // Handle database or other unexpected errors
-        return { success: false, error: 'Internal server error' }
+        return {
+          success: false,
+          error: 'Internal server error',
+          message: 'Internal server error',
+        }
       }
     },
     // When successful, clear the cache to show the updated data
-    onSuccess: (data: { mesage: string }) => {
+    onSuccess: ({ message }: { message: string }) => {
       queryClient.invalidateQueries({ queryKey: [taskKey] })
-      toast.success(data.mesage)
+      return toast.success(message)
     },
     onError: (error) => {
-      console.error('Error creating task:', error.message)
+      return console.error('Error creating task:', error.message)
     },
   })
 
@@ -202,7 +206,8 @@ function AddTaskPage() {
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button type="button" variant={'outline'}>
-                        {field.value.toLocaleDateString()}
+                        {/* {field.value.toLocaleDateString()} */}
+                        {format(field.value, 'yyyy-MM-dd')}
                         <CalendarIcon className="h-4 w-4 text-muted-foreground shrink-0" />
                       </Button>
                     </PopoverTrigger>
