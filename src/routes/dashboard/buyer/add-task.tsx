@@ -7,7 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
-import { taskConstant } from '#/lib/constants'
+import { taskConstant, taskKey } from '#/lib/constants'
 import {
   Field,
   FieldError,
@@ -21,9 +21,12 @@ import {
 } from '#/components/ui/popover'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '#/components/ui/calendar'
-import { createTask } from '#/lib/actions/task.actions'
 import { Spinner } from '#/components/ui/spinner'
 import { toast } from 'sonner'
+import { useMutation } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import z from 'zod'
 
 export const Route = createFileRoute('/dashboard/buyer/add-task')({
   component: AddTaskPage,
@@ -31,19 +34,42 @@ export const Route = createFileRoute('/dashboard/buyer/add-task')({
 
 function AddTaskPage() {
   const session = Route.useRouteContext()
+  const queryClient = useQueryClient()
 
   const form = useForm<FormTaskValuesType>({
     resolver: zodResolver(FormTaskSchema),
     defaultValues: { ...taskConstant, buyerId: session.user.id },
   })
 
-  async function onSubmit(data: FormTaskValuesType) {
-    const task = await createTask({ data })
+  // Mutation to create task.
+  const createTaskMutation = useMutation({
+    mutationFn: async (newTaskData: FormTaskValuesType) => {
+      try {
+        const validatedData = FormTaskSchema.parse(newTaskData)
+        const response = await axios.post('/api/task', validatedData)
+        return response.data
+      } catch (error) {
+        // z.parse() throws a ZodError if validation fails
+        if (error instanceof z.ZodError) {
+          return { success: false, error: error.issues }
+        }
 
-    if (task) {
-      toast.success('Task posted successfully')
-      form.reset()
-    }
+        // Handle database or other unexpected errors
+        return { success: false, error: 'Internal server error' }
+      }
+    },
+    // When successful, clear the cache to show the updated data
+    onSuccess: (data: { mesage: string }) => {
+      queryClient.invalidateQueries({ queryKey: [taskKey] })
+      toast.success(data.mesage)
+    },
+    onError: (error) => {
+      console.error('Error creating task:', error.message)
+    },
+  })
+
+  function onSubmit(data: FormTaskValuesType) {
+    createTaskMutation.mutate(data)
   }
 
   const requiredWorkers = form.watch('requiredWorkers')
@@ -185,7 +211,7 @@ function AddTaskPage() {
                         mode="single"
                         required
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => field.onChange(date)}
                         disabled={{ before: new Date() }}
                         captionLayout="dropdown"
                       />
