@@ -18,15 +18,28 @@ import {
   TableRow,
 } from '#/components/ui/table'
 import { Textarea } from '#/components/ui/textarea'
+import { getTasks } from '#/lib/actions/task.actions'
+import { ensureSession } from '#/middleware/auth.function'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/dashboard/buyer/my-task')({
   component: MyTasks,
+  loader: async () => {
+    const session = await ensureSession()
+    const tasks = await getTasks({ data: { buyerId: session.user.id } })
+    return tasks
+  },
 })
 
-function MyTasks() {
+async function MyTasks() {
   const [editing, setEditing] = useState<any>(null)
+  const myTasks = Route.useLoaderData()
+
+  // const myTasks = await getTasks({ data: { buyerId: session.user.id } })
+
+  console.log(myTasks)
+
   return (
     <>
       <SectionHeader
