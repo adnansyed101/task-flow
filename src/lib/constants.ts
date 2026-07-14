@@ -29,3 +29,7 @@ export const taskConstant: FormTaskValuesType = {
 }
 
 export const taskKey = 'create-task'
+export const submissionsKey = 'submissions'
+export const withdrawalsKey = 'withdrawals'
+export const paymentsKey = 'payments'
+export const notificationsKey = 'notifications'
