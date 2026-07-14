@@ -16,6 +16,7 @@ export const loginConstant: LoginType = {
 }
 
 export const taskConstant: FormTaskValuesType = {
+  id: '',
   taskTitle: '',
   taskDetail: '',
   requiredWorkers: 0,

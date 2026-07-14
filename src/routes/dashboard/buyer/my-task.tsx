@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from '#/components/ui/dialog'
 import { Input } from '#/components/ui/input'
-import { Label } from '#/components/ui/label'
 import {
   Table,
   TableBody,
@@ -19,7 +18,7 @@ import {
 } from '#/components/ui/table'
 import { Textarea } from '#/components/ui/textarea'
 import { getTasks } from '#/lib/actions/actions'
-import { taskConstant } from '#/lib/constants'
+import { taskConstant, taskKey } from '#/lib/constants'
 import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
 import { ensureSession } from '#/middleware/auth.function'
 import { createFileRoute } from '@tanstack/react-router'
@@ -33,6 +32,10 @@ import {
   FieldGroup,
   FieldLabel,
 } from '#/components/ui/field'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
+import z from 'zod'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/dashboard/buyer/my-task')({
   component: MyTasks,
@@ -48,10 +51,64 @@ function MyTasks() {
     useState<FormTaskValuesType>(taskConstant)
   const [isOpen, setIsOpen] = useState(false)
   const tasks = Route.useLoaderData()
+  const queryClient = useQueryClient()
 
   const form = useForm<FormTaskValuesType>({
     resolver: zodResolver(FormTaskSchema),
     values: selectedItem,
+  })
+
+  // Mutation to create task.
+  const updateTaskMutation = useMutation({
+    mutationFn: async (newTaskData: FormTaskValuesType) => {
+      try {
+        const validatedData = FormTaskSchema.parse(newTaskData)
+        const response = await axios.patch('/api/task', validatedData)
+        return response.data
+      } catch (error) {
+        // z.parse() throws a ZodError if validation fails
+        if (error instanceof z.ZodError) {
+          return { success: false, error: error.issues }
+        }
+
+        // Handle database or other unexpected errors
+        return { success: false, error: 'Internal server error' }
+      }
+    },
+    // When successful, clear the cache to show the updated data
+    onSuccess: (data: { message: string }) => {
+      queryClient.invalidateQueries({ queryKey: [taskKey] })
+      return toast.success(data.message)
+    },
+    onError: (error) => {
+      console.error('Error creating task:', error.message)
+    },
+  })
+
+  // Mutation to create task.
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const response = await axios.delete(`/api/task/${id}`)
+        return response.data
+      } catch (error) {
+        // z.parse() throws a ZodError if validation fails
+        if (error instanceof z.ZodError) {
+          return { success: false, error: error.issues }
+        }
+
+        // Handle database or other unexpected errors
+        return { success: false, error: 'Internal server error' }
+      }
+    },
+    // When successful, clear the cache to show the updated data
+    onSuccess: (data: { message: string }) => {
+      queryClient.invalidateQueries({ queryKey: [taskKey] })
+      return toast.success(data.message)
+    },
+    onError: (error) => {
+      console.error('Error creating task:', error.message)
+    },
   })
 
   const handleOpenDialog = (item: FormTaskValuesType) => {
@@ -103,10 +160,9 @@ function MyTasks() {
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
-                    // onClick={() => {
-                    //   deleteTask(t.id)
-                    //   toast('Task deleted, coins refunded')
-                    // }}
+                    onClick={() => {
+                      deleteMutation.mutate(t.id)
+                    }}
                   >
                     Delete
                   </Button>

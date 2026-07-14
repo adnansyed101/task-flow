@@ -21,6 +21,7 @@ import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admi
 import { Route as DashboardWorkerIndexRouteImport } from './routes/dashboard/worker/index'
 import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buyer/index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin/index'
+import { Route as ApiTaskIndexRouteImport } from './routes/api/task/index'
 import { Route as DashboardWorkerWithdrawalsRouteImport } from './routes/dashboard/worker/withdrawals'
 import { Route as DashboardWorkerTaskListRouteImport } from './routes/dashboard/worker/task-list'
 import { Route as DashboardWorkerSubmissionsRouteImport } from './routes/dashboard/worker/submissions'
@@ -34,6 +35,7 @@ import { Route as DashboardAdminWithdrawRequestsRouteImport } from './routes/das
 import { Route as DashboardAdminManageUserRouteImport } from './routes/dashboard/admin/manage-user'
 import { Route as DashboardAdminManageTaskRouteImport } from './routes/dashboard/admin/manage-task'
 import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
+import { Route as ApiTaskIdRouteImport } from './routes/api/task/$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -95,6 +97,11 @@ const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
+const ApiTaskIndexRoute = ApiTaskIndexRouteImport.update({
+  id: '/api/task/',
+  path: '/api/task/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardWorkerWithdrawalsRoute =
   DashboardWorkerWithdrawalsRouteImport.update({
@@ -168,6 +175,11 @@ const DashboardAdminHomeRoute = DashboardAdminHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => DashboardAdminRouteRoute,
 } as any)
+const ApiTaskIdRoute = ApiTaskIdRouteImport.update({
+  id: '/api/task/$id',
+  path: '/api/task/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -185,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
   '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
@@ -198,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
   '/dashboard/worker/': typeof DashboardWorkerIndexRoute
@@ -209,6 +223,7 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
   '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
@@ -222,6 +237,7 @@ export interface FileRoutesByTo {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/task': typeof ApiTaskIndexRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/buyer': typeof DashboardBuyerIndexRoute
   '/dashboard/worker': typeof DashboardWorkerIndexRoute
@@ -238,6 +254,7 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
   '/dashboard/admin/manage-user': typeof DashboardAdminManageUserRoute
@@ -251,6 +268,7 @@ export interface FileRoutesById {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
   '/dashboard/worker/': typeof DashboardWorkerIndexRoute
@@ -268,6 +286,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
     | '/dashboard/admin/manage-user'
@@ -281,6 +300,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
     | '/dashboard/worker/'
@@ -292,6 +312,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard'
     | '/api/auth/$'
+    | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
     | '/dashboard/admin/manage-user'
@@ -305,6 +326,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/task'
     | '/dashboard/admin'
     | '/dashboard/buyer'
     | '/dashboard/worker'
@@ -320,6 +342,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
     | '/dashboard/admin/manage-user'
@@ -333,6 +356,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
     | '/dashboard/worker/'
@@ -343,6 +367,8 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiTaskIdRoute: typeof ApiTaskIdRoute
+  ApiTaskIndexRoute: typeof ApiTaskIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -430,6 +456,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminIndexRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
+    }
+    '/api/task/': {
+      id: '/api/task/'
+      path: '/api/task'
+      fullPath: '/api/task/'
+      preLoaderRoute: typeof ApiTaskIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/worker/withdrawals': {
       id: '/dashboard/worker/withdrawals'
@@ -521,6 +554,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/admin/home'
       preLoaderRoute: typeof DashboardAdminHomeRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
+    }
+    '/api/task/$id': {
+      id: '/api/task/$id'
+      path: '/api/task/$id'
+      fullPath: '/api/task/$id'
+      preLoaderRoute: typeof ApiTaskIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -628,6 +668,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiTaskIdRoute: ApiTaskIdRoute,
+  ApiTaskIndexRoute: ApiTaskIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

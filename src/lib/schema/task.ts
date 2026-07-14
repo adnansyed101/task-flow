@@ -7,7 +7,7 @@ const baseTaskSchema = z.object({
   taskDetail: z.string(),
   requiredWorkers: z.number(),
   payableAmount: z.number(),
-  completionDate: z.date({ error: 'Date of birth is required' }),
+  completionDate: z.date({ message: 'Please select a valid date' }),
   submissionInfo: z.string(),
   taskImageUrl: z.string(),
   status: z.union([
