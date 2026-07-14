@@ -18,10 +18,21 @@ import {
   TableRow,
 } from '#/components/ui/table'
 import { Textarea } from '#/components/ui/textarea'
-import { getTasks } from '#/lib/actions/task.actions'
+import { getTasks } from '#/lib/actions/actions'
+import { taskConstant } from '#/lib/constants'
+import { FormTaskSchema, type FormTaskValuesType } from '#/lib/schema/task'
 import { ensureSession } from '#/middleware/auth.function'
 import { createFileRoute } from '@tanstack/react-router'
+import { format } from 'date-fns'
 import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '#/components/ui/field'
 
 export const Route = createFileRoute('/dashboard/buyer/my-task')({
   component: MyTasks,
@@ -32,13 +43,25 @@ export const Route = createFileRoute('/dashboard/buyer/my-task')({
   },
 })
 
-async function MyTasks() {
-  const [editing, setEditing] = useState<any>(null)
-  const myTasks = Route.useLoaderData()
+function MyTasks() {
+  const [selectedItem, setSelectedItem] =
+    useState<FormTaskValuesType>(taskConstant)
+  const [isOpen, setIsOpen] = useState(false)
+  const tasks = Route.useLoaderData()
 
-  // const myTasks = await getTasks({ data: { buyerId: session.user.id } })
+  const form = useForm<FormTaskValuesType>({
+    resolver: zodResolver(FormTaskSchema),
+    values: selectedItem,
+  })
 
-  console.log(myTasks)
+  const handleOpenDialog = (item: FormTaskValuesType) => {
+    setSelectedItem(item)
+    setIsOpen(true)
+  }
+
+  function onSubmit(taskData: FormTaskValuesType) {
+    console.log(taskData)
+  }
 
   return (
     <>
@@ -58,37 +81,38 @@ async function MyTasks() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="max-w-md truncate font-medium">
-                {/* {t.title} */}
-                This is task 1
-              </TableCell>
-              <TableCell>20</TableCell>
-              <TableCell>300 coins</TableCell>
-              <TableCell className="text-muted-foreground">
-                {new Date().toLocaleDateString()}
-              </TableCell>
-              <TableCell className="text-right">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  // onClick={() => openEdit(t)}
-                >
-                  Update
-                </Button>{' '}
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-destructive hover:text-destructive"
-                  // onClick={() => {
-                  //   deleteTask(t.id)
-                  //   toast('Task deleted, coins refunded')
-                  // }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
+            {tasks.map((t) => (
+              <TableRow key={t.id}>
+                <TableCell className="max-w-md truncate font-medium">
+                  {t.taskTitle}
+                </TableCell>
+                <TableCell>{t.requiredWorkers}</TableCell>
+                <TableCell>{t.payableAmount}</TableCell>
+                <TableCell className="text-muted-foreground">
+                  {format(t.completionDate, 'dd / MMMM / yyyy')}
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleOpenDialog(t)}
+                  >
+                    Update
+                  </Button>{' '}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-destructive hover:text-destructive"
+                    // onClick={() => {
+                    //   deleteTask(t.id)
+                    //   toast('Task deleted, coins refunded')
+                    // }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
 
             {/* {sorted.length === 0 && (
               <TableRow>
@@ -104,40 +128,81 @@ async function MyTasks() {
         </Table>
       </Card>
 
-      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+      <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Update task</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label>Title</Label>
-              <Input
-                // value={f.title}
-                // onChange={(e) => setF({ ...f, title: e.target.value })}
-                className="mt-1.5"
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="taskTitle"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="taskTitle">Title</FieldLabel>
+                    <Input
+                      id="taskTitle"
+                      {...field}
+                      required
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter Title"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
               />
-            </div>
-            <div>
-              <Label>Detail</Label>
-              <Textarea
-                rows={3}
-                // value={f.detail}
-                // onChange={(e) => setF({ ...f, detail: e.target.value })}
-                className="mt-1.5"
+              <Controller
+                name="taskDetail"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="taskDetail">Task Details</FieldLabel>
+                    <Textarea
+                      rows={6}
+                      id="taskDetail"
+                      {...field}
+                      required
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter Task Details"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
               />
-            </div>
-            <div>
-              <Label>Submission info</Label>
-              <Textarea
-                rows={2}
-                // value={f.submissionInfo}
-                // onChange={(e) => setF({ ...f, submissionInfo: e.target.value })}
-                className="mt-1.5"
+              <Controller
+                name="submissionInfo"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="submissionInfo">
+                      Submission Info
+                    </FieldLabel>
+                    <Textarea
+                      rows={2}
+                      id="submissionInfo"
+                      {...field}
+                      required
+                      aria-invalid={fieldState.invalid}
+                      placeholder="What proof do you need? (e.g. screenshot with visible username)"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
               />
-            </div>
+            </FieldGroup>
+
             <Button className="rounded-full">Save changes</Button>
-          </div>
+          </form>
         </DialogContent>
       </Dialog>
     </>
