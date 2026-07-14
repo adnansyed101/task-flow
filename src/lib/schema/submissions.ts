@@ -1,13 +1,9 @@
 import { z } from 'zod'
 import { customUserSchema } from './user'
+import { ResponseTaskSchema } from './task'
 
 const baseSubmissionSchema = z.object({
   id: z.string(),
-  taskId: z.string(),
-  taskTitle: z.string(),
-  payableAmount: z.number(),
-  workerEmail: z.string().email(), // Added .email() validation for safety
-  workerName: z.string(),
   submissionDetails: z.string(),
   currentDate: z.date(), // Assumes ISO string or formatted date string
   status: z.union([
@@ -18,12 +14,14 @@ const baseSubmissionSchema = z.object({
 })
 
 export const FormSubmissionSchema = baseSubmissionSchema.extend({
-  buyerId: z.string().min(1, 'Buyer is required'),
+  workerId: z.string().min(1, 'Worker Id is required'),
+  taskId: z.string().min(1, 'Task Id is required'),
 })
 
 export const ResponseSubmissionSchema = baseSubmissionSchema.extend({
-  buyer: customUserSchema,
+  worker: customUserSchema,
+  task: ResponseTaskSchema,
 })
 
-export type FormSubmissionValues = z.infer<typeof FormSubmissionSchema>
-export type ResponseSubmission = z.infer<typeof ResponseSubmissionSchema>
+export type FormSubmissionValuesType = z.infer<typeof FormSubmissionSchema>
+export type ResponseSubmissionType = z.infer<typeof ResponseSubmissionSchema>

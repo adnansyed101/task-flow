@@ -22,6 +22,7 @@ import { Route as DashboardWorkerIndexRouteImport } from './routes/dashboard/wor
 import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buyer/index'
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin/index'
 import { Route as ApiTaskIndexRouteImport } from './routes/api/task/index'
+import { Route as ApiSubmissionIndexRouteImport } from './routes/api/submission/index'
 import { Route as DashboardWorkerWithdrawalsRouteImport } from './routes/dashboard/worker/withdrawals'
 import { Route as DashboardWorkerTaskListRouteImport } from './routes/dashboard/worker/task-list'
 import { Route as DashboardWorkerSubmissionsRouteImport } from './routes/dashboard/worker/submissions'
@@ -101,6 +102,11 @@ const DashboardAdminIndexRoute = DashboardAdminIndexRouteImport.update({
 const ApiTaskIndexRoute = ApiTaskIndexRouteImport.update({
   id: '/api/task/',
   path: '/api/task/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSubmissionIndexRoute = ApiSubmissionIndexRouteImport.update({
+  id: '/api/submission/',
+  path: '/api/submission/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardWorkerWithdrawalsRoute =
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/submission/': typeof ApiSubmissionIndexRoute
   '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/submission': typeof ApiSubmissionIndexRoute
   '/api/task': typeof ApiTaskIndexRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/buyer': typeof DashboardBuyerIndexRoute
@@ -268,6 +276,7 @@ export interface FileRoutesById {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/submission/': typeof ApiSubmissionIndexRoute
   '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/submission/'
     | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/submission'
     | '/api/task'
     | '/dashboard/admin'
     | '/dashboard/buyer'
@@ -356,6 +367,7 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/submission/'
     | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
@@ -368,6 +380,7 @@ export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiTaskIdRoute: typeof ApiTaskIdRoute
+  ApiSubmissionIndexRoute: typeof ApiSubmissionIndexRoute
   ApiTaskIndexRoute: typeof ApiTaskIndexRoute
 }
 
@@ -462,6 +475,13 @@ declare module '@tanstack/react-router' {
       path: '/api/task'
       fullPath: '/api/task/'
       preLoaderRoute: typeof ApiTaskIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/submission/': {
+      id: '/api/submission/'
+      path: '/api/submission'
+      fullPath: '/api/submission/'
+      preLoaderRoute: typeof ApiSubmissionIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/worker/withdrawals': {
@@ -669,6 +689,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiTaskIdRoute: ApiTaskIdRoute,
+  ApiSubmissionIndexRoute: ApiSubmissionIndexRoute,
   ApiTaskIndexRoute: ApiTaskIndexRoute,
 }
 export const routeTree = rootRouteImport
