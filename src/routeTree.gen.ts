@@ -37,6 +37,7 @@ import { Route as DashboardAdminManageUserRouteImport } from './routes/dashboard
 import { Route as DashboardAdminManageTaskRouteImport } from './routes/dashboard/admin/manage-task'
 import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
 import { Route as ApiTaskIdRouteImport } from './routes/api/task/$id'
+import { Route as ApiSubmissionIdRouteImport } from './routes/api/submission/$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -186,6 +187,11 @@ const ApiTaskIdRoute = ApiTaskIdRouteImport.update({
   path: '/api/task/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSubmissionIdRoute = ApiSubmissionIdRouteImport.update({
+  id: '/api/submission/$id',
+  path: '/api/submission/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -203,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/$id': typeof ApiSubmissionIdRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/$id': typeof ApiSubmissionIdRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/$id': typeof ApiSubmissionIdRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/submission/$id'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard'
     | '/api/auth/$'
+    | '/api/submission/$id'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/submission/$id'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -379,6 +391,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiSubmissionIdRoute: typeof ApiSubmissionIdRoute
   ApiTaskIdRoute: typeof ApiTaskIdRoute
   ApiSubmissionIndexRoute: typeof ApiSubmissionIndexRoute
   ApiTaskIndexRoute: typeof ApiTaskIndexRoute
@@ -582,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTaskIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/submission/$id': {
+      id: '/api/submission/$id'
+      path: '/api/submission/$id'
+      fullPath: '/api/submission/$id'
+      preLoaderRoute: typeof ApiSubmissionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -688,6 +708,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiSubmissionIdRoute: ApiSubmissionIdRoute,
   ApiTaskIdRoute: ApiTaskIdRoute,
   ApiSubmissionIndexRoute: ApiSubmissionIndexRoute,
   ApiTaskIndexRoute: ApiTaskIndexRoute,
