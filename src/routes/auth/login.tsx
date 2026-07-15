@@ -138,7 +138,12 @@ function LoginPage() {
               />
             </FieldGroup>
 
-            <Button type="submit" className="w-full rounded-full" size="lg">
+            <Button
+              type="submit"
+              className="w-full rounded-full"
+              size="lg"
+              disabled={form.formState.isLoading}
+            >
               Log in
             </Button>
           </form>
