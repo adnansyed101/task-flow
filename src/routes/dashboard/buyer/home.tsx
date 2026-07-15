@@ -20,10 +20,11 @@ import {
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { submissionsKey } from '#/lib/constants'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import type { ResponseSubmissionType } from '#/lib/schema/submissions'
 import { Spinner } from '#/components/ui/spinner'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/dashboard/buyer/home')({
   component: BuyerHomePage,
@@ -116,6 +117,27 @@ function BuyerHomePage() {
 
 function ReviewRow({ sub }: { sub: ResponseSubmissionType }) {
   const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
+
+  const updateSubmissionMutation = useMutation({
+    mutationFn: async (status: 'pending' | 'approved' | 'rejected') => {
+      try {
+        const response = await axios.patch('/api/submission', {
+          status,
+          id: sub.id,
+        })
+        return response.data
+      } catch (error) {
+        // Handle database or other unexpected errors
+        return { success: false, message: 'Internal server error' }
+      }
+    },
+    onSuccess: (data: { message: string }) => {
+      queryClient.invalidateQueries({ queryKey: [submissionsKey] })
+      return toast.success(data.message)
+    },
+  })
+
   return (
     <>
       <TableRow>
@@ -130,14 +152,17 @@ function ReviewRow({ sub }: { sub: ResponseSubmissionType }) {
             <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
               View
             </Button>
-            <Button size="sm" onClick={() => console.log('action')}>
+            <Button
+              size="sm"
+              onClick={() => updateSubmissionMutation.mutate('approved')}
+            >
               Approve
             </Button>
             <Button
               size="sm"
               variant="ghost"
               className="text-destructive hover:text-destructive"
-              onClick={() => console.log('action')}
+              onClick={() => updateSubmissionMutation.mutate('rejected')}
             >
               Reject
             </Button>
