@@ -1,8 +1,8 @@
-import { Bell, Coins, LogOut, Menu, X } from 'lucide-react'
-import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
+import { Coins, LogOut, Menu, X } from 'lucide-react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import { Button } from '../ui/button'
 import { authClient } from '#/lib/auth-client'
-import { Route } from '@/routes/__root'
+import { useMatch } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 type DashboardHeaderType = {
@@ -15,7 +15,7 @@ const DashboardHeader = ({
   setMobileOpen,
 }: DashboardHeaderType) => {
   const [notifOpen, setNotifOpen] = useState(false)
-  const { session } = Route.useRouteContext()
+  const { session } = useMatch({ from: '__root__' }).context
 
   function logOut() {
     void authClient.signOut()
