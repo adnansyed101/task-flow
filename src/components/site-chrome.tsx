@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useMatch } from '@tanstack/react-router'
 import { Coins, LogOut, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Route } from '@/routes/__root'
+
 import { authClient } from '#/lib/auth-client'
 
 const GH = 'https://github.com'
@@ -19,7 +19,7 @@ const GH = 'https://github.com'
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
 
-  const { session } = Route.useRouteContext()
+  const { session } = useMatch({ from: '__root__' }).context
 
   function logOut() {
     void authClient.signOut()
