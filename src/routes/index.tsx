@@ -12,7 +12,6 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { SiteHeader, SiteFooter } from '@/components/site-chrome'
-import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/')({
@@ -275,10 +274,54 @@ function HowItWorks() {
 }
 
 function BestWorkers() {
-  const workers = useStore((s) => s.users)
+  const users = [
+    {
+      id: 'admin-1',
+      name: 'Platform Admin',
+      email: 'admin@microtask.io',
+      password: 'Admin@123',
+      photoURL: 'https://api.dicebear.com/7.x/notionists/svg?seed=admin',
+      role: 'admin',
+      coins: 0,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'buyer-1',
+      name: 'Nadia Rahman',
+      email: 'buyer@microtask.io',
+      password: 'Buyer@123',
+      photoURL: 'https://api.dicebear.com/7.x/notionists/svg?seed=nadia',
+      role: 'buyer',
+      coins: 320,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'worker-1',
+      name: 'Arif Hasan',
+      email: 'worker@microtask.io',
+      password: 'Worker@123',
+      photoURL: 'https://api.dicebear.com/7.x/notionists/svg?seed=arif',
+      role: 'worker',
+      coins: 420,
+      createdAt: new Date().toISOString(),
+    },
+    ...['Sara', 'Kenji', 'Priya', 'Diego', 'Emma', 'Liam'].map((n, i) => ({
+      id: `worker-${i + 2}`,
+      name: n + ' ' + ['Chen', 'Ito', 'Sharma', 'Rossi', 'Novak', 'Walker'][i],
+      email: `${n.toLowerCase()}@microtask.io`,
+      password: 'Worker@123',
+      photoURL: `https://api.dicebear.com/7.x/notionists/svg?seed=${n}`,
+      role: 'worker',
+      coins: 380 - i * 40,
+      createdAt: new Date().toISOString(),
+    })),
+  ]
+
+  const workers = users
     .filter((u) => u.role === 'worker')
     .sort((a, b) => b.coins - a.coins)
     .slice(0, 6)
+
   return (
     <section id="workers" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
       <div className="flex items-end justify-between gap-6">
