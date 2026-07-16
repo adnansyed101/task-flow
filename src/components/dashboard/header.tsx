@@ -1,4 +1,3 @@
-import { useStore } from '#/lib/store'
 import { Bell, Coins, LogOut, Menu, X } from 'lucide-react'
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 import { Button } from '../ui/button'
@@ -56,11 +55,11 @@ const DashboardHeader = ({
             </span>
           </div>
 
-          <NotificationBell
+          {/* <NotificationBell
             open={notifOpen}
             setOpen={setNotifOpen}
             email={session.user.email}
-          />
+          /> */}
 
           <div className="hidden items-center gap-3 sm:flex">
             <div className="text-right">
@@ -90,71 +89,71 @@ const DashboardHeader = ({
   )
 }
 
-function NotificationBell({
-  open,
-  setOpen,
-  email,
-}: {
-  open: boolean
-  setOpen: (v: boolean) => void
-  email: string
-}) {
-  const notes = useStore((s) => s.notifications)
-    .filter((n) => n.toEmail === email)
-    .sort((a, b) => (a.time > b.time ? -1 : 1))
+// function NotificationBell({
+//   open,
+//   setOpen,
+//   email,
+// }: {
+//   open: boolean
+//   setOpen: (v: boolean) => void
+//   email: string
+// }) {
+//   const notes = useStore((s) => s.notifications)
+//     .filter((n) => n.toEmail === email)
+//     .sort((a, b) => (a.time > b.time ? -1 : 1))
 
-  useEffect(() => {
-    if (!open) return
-    const h = () => setOpen(false)
-    const t = setTimeout(() => document.addEventListener('click', h), 50)
-    return () => {
-      clearTimeout(t)
-      document.removeEventListener('click', h)
-    }
-  }, [open, setOpen])
+//   useEffect(() => {
+//     if (!open) return
+//     const h = () => setOpen(false)
+//     const t = setTimeout(() => document.addEventListener('click', h), 50)
+//     return () => {
+//       clearTimeout(t)
+//       document.removeEventListener('click', h)
+//     }
+//   }, [open, setOpen])
 
-  return (
-    <div className="relative">
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          setOpen(!open)
-        }}
-        className="relative rounded-full p-2 hover:bg-muted"
-      >
-        <Bell className="h-4 w-4" />
-        {notes.length > 0 && (
-          <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-accent" />
-        )}
-      </button>
-      {open && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="absolute right-0 top-full mt-2 w-80 rounded-2xl border border-border bg-popover p-2 text-popover-foreground shadow-lg"
-        >
-          <div className="px-3 py-2 text-xs uppercase tracking-widest text-muted-foreground">
-            Notifications
-          </div>
-          {notes.length === 0 ? (
-            <div className="px-3 py-6 text-center text-sm text-muted-foreground">
-              You're all caught up.
-            </div>
-          ) : (
-            <div className="max-h-80 space-y-1 overflow-y-auto">
-              {notes.map((n) => (
-                <div key={n.id} className="rounded-lg p-3 hover:bg-muted">
-                  <p className="text-sm">{n.message}</p>
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    {new Date(n.time).toLocaleString()}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
+//   return (
+//     <div className="relative">
+//       <button
+//         onClick={(e) => {
+//           e.stopPropagation()
+//           setOpen(!open)
+//         }}
+//         className="relative rounded-full p-2 hover:bg-muted"
+//       >
+//         <Bell className="h-4 w-4" />
+//         {notes.length > 0 && (
+//           <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-accent" />
+//         )}
+//       </button>
+//       {open && (
+//         <div
+//           onClick={(e) => e.stopPropagation()}
+//           className="absolute right-0 top-full mt-2 w-80 rounded-2xl border border-border bg-popover p-2 text-popover-foreground shadow-lg"
+//         >
+//           <div className="px-3 py-2 text-xs uppercase tracking-widest text-muted-foreground">
+//             Notifications
+//           </div>
+//           {notes.length === 0 ? (
+//             <div className="px-3 py-6 text-center text-sm text-muted-foreground">
+//               You're all caught up.
+//             </div>
+//           ) : (
+//             <div className="max-h-80 space-y-1 overflow-y-auto">
+//               {notes.map((n) => (
+//                 <div key={n.id} className="rounded-lg p-3 hover:bg-muted">
+//                   <p className="text-sm">{n.message}</p>
+//                   <div className="mt-1 text-xs text-muted-foreground">
+//                     {new Date(n.time).toLocaleString()}
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   )
+// }
 
 export default DashboardHeader
