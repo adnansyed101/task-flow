@@ -23,6 +23,7 @@ import { Route as DashboardBuyerIndexRouteImport } from './routes/dashboard/buye
 import { Route as DashboardAdminIndexRouteImport } from './routes/dashboard/admin/index'
 import { Route as ApiTaskIndexRouteImport } from './routes/api/task/index'
 import { Route as ApiSubmissionIndexRouteImport } from './routes/api/submission/index'
+import { Route as ApiPaymentHistoryIndexRouteImport } from './routes/api/payment-history/index'
 import { Route as DashboardWorkerWithdrawalsRouteImport } from './routes/dashboard/worker/withdrawals'
 import { Route as DashboardWorkerTaskListRouteImport } from './routes/dashboard/worker/task-list'
 import { Route as DashboardWorkerSubmissionsRouteImport } from './routes/dashboard/worker/submissions'
@@ -38,6 +39,10 @@ import { Route as DashboardAdminManageTaskRouteImport } from './routes/dashboard
 import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
 import { Route as ApiTaskIdRouteImport } from './routes/api/task/$id'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiPaymentFailIndexRouteImport } from './routes/api/payment/fail/index'
+import { Route as ApiPaymentCancelIndexRouteImport } from './routes/api/payment/cancel/index'
+import { Route as ApiPaymentSuccessIdRouteImport } from './routes/api/payment/success/$id'
+import { Route as ApiPaymentRequestIdRouteImport } from './routes/api/payment/request/$id'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -107,6 +112,11 @@ const ApiTaskIndexRoute = ApiTaskIndexRouteImport.update({
 const ApiSubmissionIndexRoute = ApiSubmissionIndexRouteImport.update({
   id: '/api/submission/',
   path: '/api/submission/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaymentHistoryIndexRoute = ApiPaymentHistoryIndexRouteImport.update({
+  id: '/api/payment-history/',
+  path: '/api/payment-history/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardWorkerWithdrawalsRoute =
@@ -191,6 +201,26 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPaymentFailIndexRoute = ApiPaymentFailIndexRouteImport.update({
+  id: '/api/payment/fail/',
+  path: '/api/payment/fail/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaymentCancelIndexRoute = ApiPaymentCancelIndexRouteImport.update({
+  id: '/api/payment/cancel/',
+  path: '/api/payment/cancel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaymentSuccessIdRoute = ApiPaymentSuccessIdRouteImport.update({
+  id: '/api/payment/success/$id',
+  path: '/api/payment/success/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaymentRequestIdRoute = ApiPaymentRequestIdRouteImport.update({
+  id: '/api/payment/request/$id',
+  path: '/api/payment/request/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -217,11 +247,16 @@ export interface FileRoutesByFullPath {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/payment-history/': typeof ApiPaymentHistoryIndexRoute
   '/api/submission/': typeof ApiSubmissionIndexRoute
   '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
   '/dashboard/worker/': typeof DashboardWorkerIndexRoute
+  '/api/payment/request/$id': typeof ApiPaymentRequestIdRoute
+  '/api/payment/success/$id': typeof ApiPaymentSuccessIdRoute
+  '/api/payment/cancel/': typeof ApiPaymentCancelIndexRoute
+  '/api/payment/fail/': typeof ApiPaymentFailIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -244,11 +279,16 @@ export interface FileRoutesByTo {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/payment-history': typeof ApiPaymentHistoryIndexRoute
   '/api/submission': typeof ApiSubmissionIndexRoute
   '/api/task': typeof ApiTaskIndexRoute
   '/dashboard/admin': typeof DashboardAdminIndexRoute
   '/dashboard/buyer': typeof DashboardBuyerIndexRoute
   '/dashboard/worker': typeof DashboardWorkerIndexRoute
+  '/api/payment/request/$id': typeof ApiPaymentRequestIdRoute
+  '/api/payment/success/$id': typeof ApiPaymentSuccessIdRoute
+  '/api/payment/cancel': typeof ApiPaymentCancelIndexRoute
+  '/api/payment/fail': typeof ApiPaymentFailIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -276,11 +316,16 @@ export interface FileRoutesById {
   '/dashboard/worker/submissions': typeof DashboardWorkerSubmissionsRoute
   '/dashboard/worker/task-list': typeof DashboardWorkerTaskListRoute
   '/dashboard/worker/withdrawals': typeof DashboardWorkerWithdrawalsRoute
+  '/api/payment-history/': typeof ApiPaymentHistoryIndexRoute
   '/api/submission/': typeof ApiSubmissionIndexRoute
   '/api/task/': typeof ApiTaskIndexRoute
   '/dashboard/admin/': typeof DashboardAdminIndexRoute
   '/dashboard/buyer/': typeof DashboardBuyerIndexRoute
   '/dashboard/worker/': typeof DashboardWorkerIndexRoute
+  '/api/payment/request/$id': typeof ApiPaymentRequestIdRoute
+  '/api/payment/success/$id': typeof ApiPaymentSuccessIdRoute
+  '/api/payment/cancel/': typeof ApiPaymentCancelIndexRoute
+  '/api/payment/fail/': typeof ApiPaymentFailIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -309,11 +354,16 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/payment-history/'
     | '/api/submission/'
     | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
     | '/dashboard/worker/'
+    | '/api/payment/request/$id'
+    | '/api/payment/success/$id'
+    | '/api/payment/cancel/'
+    | '/api/payment/fail/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -336,11 +386,16 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/payment-history'
     | '/api/submission'
     | '/api/task'
     | '/dashboard/admin'
     | '/dashboard/buyer'
     | '/dashboard/worker'
+    | '/api/payment/request/$id'
+    | '/api/payment/success/$id'
+    | '/api/payment/cancel'
+    | '/api/payment/fail'
   id:
     | '__root__'
     | '/'
@@ -367,11 +422,16 @@ export interface FileRouteTypes {
     | '/dashboard/worker/submissions'
     | '/dashboard/worker/task-list'
     | '/dashboard/worker/withdrawals'
+    | '/api/payment-history/'
     | '/api/submission/'
     | '/api/task/'
     | '/dashboard/admin/'
     | '/dashboard/buyer/'
     | '/dashboard/worker/'
+    | '/api/payment/request/$id'
+    | '/api/payment/success/$id'
+    | '/api/payment/cancel/'
+    | '/api/payment/fail/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -380,8 +440,13 @@ export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiTaskIdRoute: typeof ApiTaskIdRoute
+  ApiPaymentHistoryIndexRoute: typeof ApiPaymentHistoryIndexRoute
   ApiSubmissionIndexRoute: typeof ApiSubmissionIndexRoute
   ApiTaskIndexRoute: typeof ApiTaskIndexRoute
+  ApiPaymentRequestIdRoute: typeof ApiPaymentRequestIdRoute
+  ApiPaymentSuccessIdRoute: typeof ApiPaymentSuccessIdRoute
+  ApiPaymentCancelIndexRoute: typeof ApiPaymentCancelIndexRoute
+  ApiPaymentFailIndexRoute: typeof ApiPaymentFailIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -482,6 +547,13 @@ declare module '@tanstack/react-router' {
       path: '/api/submission'
       fullPath: '/api/submission/'
       preLoaderRoute: typeof ApiSubmissionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payment-history/': {
+      id: '/api/payment-history/'
+      path: '/api/payment-history'
+      fullPath: '/api/payment-history/'
+      preLoaderRoute: typeof ApiPaymentHistoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/worker/withdrawals': {
@@ -589,6 +661,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/payment/fail/': {
+      id: '/api/payment/fail/'
+      path: '/api/payment/fail'
+      fullPath: '/api/payment/fail/'
+      preLoaderRoute: typeof ApiPaymentFailIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payment/cancel/': {
+      id: '/api/payment/cancel/'
+      path: '/api/payment/cancel'
+      fullPath: '/api/payment/cancel/'
+      preLoaderRoute: typeof ApiPaymentCancelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payment/success/$id': {
+      id: '/api/payment/success/$id'
+      path: '/api/payment/success/$id'
+      fullPath: '/api/payment/success/$id'
+      preLoaderRoute: typeof ApiPaymentSuccessIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payment/request/$id': {
+      id: '/api/payment/request/$id'
+      path: '/api/payment/request/$id'
+      fullPath: '/api/payment/request/$id'
+      preLoaderRoute: typeof ApiPaymentRequestIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -689,8 +789,13 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiTaskIdRoute: ApiTaskIdRoute,
+  ApiPaymentHistoryIndexRoute: ApiPaymentHistoryIndexRoute,
   ApiSubmissionIndexRoute: ApiSubmissionIndexRoute,
   ApiTaskIndexRoute: ApiTaskIndexRoute,
+  ApiPaymentRequestIdRoute: ApiPaymentRequestIdRoute,
+  ApiPaymentSuccessIdRoute: ApiPaymentSuccessIdRoute,
+  ApiPaymentCancelIndexRoute: ApiPaymentCancelIndexRoute,
+  ApiPaymentFailIndexRoute: ApiPaymentFailIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
