@@ -38,6 +38,18 @@ export const Route = createFileRoute('/api/task/')({
           body.completionDate = new Date(body.completionDate)
           const { id, ...vlaidatedData } = FormTaskSchema.parse(body)
 
+          const session = await ensureSession()
+          const total =
+            vlaidatedData.payableAmount * vlaidatedData.requiredWorkers
+
+          if (total > session.user.coin) {
+            return Response.json({
+              success: false,
+              data: {},
+              message: 'User does not have enough coins.',
+            })
+          }
+
           const newTask = await prisma.task.create({
             data: vlaidatedData,
           })

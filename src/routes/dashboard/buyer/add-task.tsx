@@ -72,14 +72,18 @@ function AddTaskPage() {
     },
   })
 
-  function onSubmit(data: FormTaskValuesType) {
-    createTaskMutation.mutate(data)
-  }
-
   const requiredWorkers = form.watch('requiredWorkers')
   const payableAmount = form.watch('payableAmount')
 
   const total = requiredWorkers * payableAmount
+
+  function onSubmit(data: FormTaskValuesType) {
+    if (total > session.user.coin) {
+      return toast.warning('Not Enough Coins')
+    } else {
+      return createTaskMutation.mutate(data)
+    }
+  }
 
   return (
     <>
