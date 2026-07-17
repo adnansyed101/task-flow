@@ -21,6 +21,7 @@ async function main() {
       password: 'Admin@123',
       name: 'Admin System',
       role: Role.admin,
+      coin: 100,
     },
   })
 
@@ -30,6 +31,7 @@ async function main() {
       password: 'Buyer@123',
       name: 'Buyer System',
       role: Role.buyer,
+      coin: 100,
     },
   })
 
@@ -39,6 +41,7 @@ async function main() {
       password: 'Worker@123',
       name: 'Worker System',
       role: Role.worker,
+      coin: 100,
     },
   })
 
@@ -94,7 +97,8 @@ async function main() {
       requiredWorkers: 3,
       payableAmount: 15.0,
       completionDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-      submissionInfo: 'Submit the Amazon review link and a photo of the product.',
+      submissionInfo:
+        'Submit the Amazon review link and a photo of the product.',
       taskImageUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571',
       status: TaskStatus.pending,
       buyerId: buyer.id,
@@ -110,7 +114,8 @@ async function main() {
       payableAmount: 2.0,
       completionDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       submissionInfo: 'Submit the tweet URL and a screenshot of the tags.',
-      taskImageUrl: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0',
+      taskImageUrl:
+        'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0',
       status: TaskStatus.approved,
       buyerId: buyer.id,
     },
@@ -126,7 +131,8 @@ async function main() {
       completionDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
       submissionInfo:
         'Submit a screenshot of your app store rating and workout summary.',
-      taskImageUrl: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8',
+      taskImageUrl:
+        'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8',
       status: TaskStatus.rejected,
       buyerId: buyer.id,
     },
