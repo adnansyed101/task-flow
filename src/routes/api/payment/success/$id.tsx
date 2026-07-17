@@ -23,6 +23,17 @@ export const Route = createFileRoute('/api/payment/success/$id')({
             },
           })
 
+          await prisma.user.update({
+            where: {
+              id,
+            },
+            data: {
+              coin: {
+                increment: coin,
+              },
+            },
+          })
+
           return Response.redirect(
             `${process.env.BETTER_AUTH_URL}/dashboard/buyer/payment-history`,
           )
