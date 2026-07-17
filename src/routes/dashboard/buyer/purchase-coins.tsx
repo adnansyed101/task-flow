@@ -1,6 +1,8 @@
 import SectionHeader from '#/components/dashboard/section-header'
 import { Button } from '#/components/ui/button'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
+import axios from 'axios'
 import { Coins, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -15,8 +17,14 @@ interface CartItem {
   quantity: number
 }
 
+type SSLResponseType = {
+  success: boolean
+  url: string
+}
+
 function PurchaseCoins() {
   const [cart, setCart] = useState<CartItem[]>([])
+  const session = Route.useRouteContext()
 
   const COIN_PACKS = [
     { coins: 10, price: 1 },
@@ -53,13 +61,33 @@ function PurchaseCoins() {
     setCart((prev) => prev.filter((item) => item.coins !== coins))
   }
 
+  const sslHandlerLink = useQuery({
+    queryKey: ['SSL', totalCoins, totalPrice],
+    queryFn: async (): Promise<SSLResponseType> => {
+      try {
+        const response = await axios.get(
+          `/api/payment/request/${session.user.id}?cost=${totalPrice}&coin=${totalPrice}`,
+        )
+
+        return response.data
+      } catch (error) {
+        // Handle database or other unexpected errors
+        return { success: false, url: 'errr' }
+      }
+    },
+  })
+
   function checkout() {
     if (cart.length === 0) {
       toast.error('Your cart is empty')
       return
     }
-    toast.success(`Purchased ${totalCoins} coins for $${totalPrice}`)
-    setCart([])
+
+    if (sslHandlerLink.data?.url) {
+      return (window.location.href = sslHandlerLink.data.url)
+    } else {
+      return toast.error('Something went wrong - SSL.')
+    }
   }
 
   return (
