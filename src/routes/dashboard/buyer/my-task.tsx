@@ -125,12 +125,10 @@ function MyTasks() {
   const handleOpenDialog = (item: FormTaskValuesType) => {
     item.completionDate = new Date(item.completionDate)
     setSelectedItem(item)
-    console.log(item)
     setIsOpen(true)
   }
 
   function onSubmit(taskData: FormTaskValuesType) {
-    console.log(taskData)
     updateTaskMutation.mutate(taskData)
   }
 
@@ -204,10 +202,7 @@ function MyTasks() {
           <DialogHeader>
             <DialogTitle>Update task</DialogTitle>
           </DialogHeader>
-          <form
-            className="space-y-4"
-            onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}
-          >
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <Controller
                 name="taskTitle"

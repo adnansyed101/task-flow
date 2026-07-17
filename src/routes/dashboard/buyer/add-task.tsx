@@ -88,7 +88,7 @@ function AddTaskPage() {
         subtitle="Describe the work, set your reward, and reach thousands of workers."
       />
 
-      <form onSubmit={form.handleSubmit(onSubmit, (e) => console.log(e))}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup className="grid gap-4 lg:grid-cols-2">
           <Controller
             name="taskTitle"
