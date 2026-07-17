@@ -49,10 +49,12 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.81.0",
     "sonner": "^2.0.7",
+    "sslcommerz": "^1.7.0",
     "sslcommerz-lts": "^1.2.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.1.18",
     "tw-animate-css": "^1.3.6",
+    "uuid": "^14.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
