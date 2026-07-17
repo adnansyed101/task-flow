@@ -52,6 +52,7 @@ function RegisterPage() {
         name: formData.fullName, // user display name
         image: formData.image, // User image URL (optional)
         role: formData.role, // User role (optional)
+        coin: formData.role === 'worker' ? 10 : 50,
         callbackURL: '/dashboard', // A URL to redirect to after the user verifies their email (optional)
       },
       {
