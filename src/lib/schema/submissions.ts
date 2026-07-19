@@ -20,8 +20,8 @@ export const FormSubmissionSchema = baseSubmissionSchema.extend({
 
 export const ResponseSubmissionSchema = baseSubmissionSchema.extend({
   worker: customUserSchema,
-  buyer: customUserSchema,
   task: ResponseTaskSchema,
+  currentDate: z.date(),
 })
 
 export type FormSubmissionValuesType = z.infer<typeof FormSubmissionSchema>
