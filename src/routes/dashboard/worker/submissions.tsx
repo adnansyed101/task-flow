@@ -48,8 +48,6 @@ function SubmissionsPage() {
     )
   }
 
-  console.log(submissions?.data?.data)
-
   return (
     <>
       <SectionHeader
