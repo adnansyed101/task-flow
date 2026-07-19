@@ -147,7 +147,7 @@ function LoginPage() {
               Log in
             </Button>
           </form>
-
+          {/* 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="h-px flex-1 bg-border" />
             or
@@ -180,7 +180,7 @@ function LoginPage() {
               />
             </svg>
             Continue with Google
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
