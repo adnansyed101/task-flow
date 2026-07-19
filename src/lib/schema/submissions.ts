@@ -20,6 +20,7 @@ export const FormSubmissionSchema = baseSubmissionSchema.extend({
 
 export const ResponseSubmissionSchema = baseSubmissionSchema.extend({
   worker: customUserSchema,
+  buyer: customUserSchema,
   task: ResponseTaskSchema,
 })
 
