@@ -2,7 +2,6 @@ import SectionHeader from '#/components/dashboard/section-header'
 import StatCard from '#/components/dashboard/stat-card'
 import StatusBadge from '#/components/dashboard/status-badge'
 import { Card } from '#/components/ui/card'
-import { Spinner } from '#/components/ui/spinner'
 import {
   Table,
   TableBody,
@@ -50,8 +49,6 @@ function WorkerHomePage() {
       </>
     )
   }
-
-  console.log(submissions.data)
 
   return (
     <>
