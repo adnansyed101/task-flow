@@ -38,6 +38,7 @@ import { Route as DashboardAdminManageUserRouteImport } from './routes/dashboard
 import { Route as DashboardAdminManageTaskRouteImport } from './routes/dashboard/admin/manage-task'
 import { Route as DashboardAdminHomeRouteImport } from './routes/dashboard/admin/home'
 import { Route as ApiTaskIdRouteImport } from './routes/api/task/$id'
+import { Route as ApiSubmissionWorkerRouteImport } from './routes/api/submission/worker'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiPaymentFailIndexRouteImport } from './routes/api/payment/fail/index'
 import { Route as ApiPaymentCancelIndexRouteImport } from './routes/api/payment/cancel/index'
@@ -196,6 +197,11 @@ const ApiTaskIdRoute = ApiTaskIdRouteImport.update({
   path: '/api/task/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSubmissionWorkerRoute = ApiSubmissionWorkerRouteImport.update({
+  id: '/api/submission/worker',
+  path: '/api/submission/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/worker': typeof ApiSubmissionWorkerRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -265,6 +272,7 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/worker': typeof ApiSubmissionWorkerRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -302,6 +310,7 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/submission/worker': typeof ApiSubmissionWorkerRoute
   '/api/task/$id': typeof ApiTaskIdRoute
   '/dashboard/admin/home': typeof DashboardAdminHomeRoute
   '/dashboard/admin/manage-task': typeof DashboardAdminManageTaskRoute
@@ -340,6 +349,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/submission/worker'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard'
     | '/api/auth/$'
+    | '/api/submission/worker'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/api/submission/worker'
     | '/api/task/$id'
     | '/dashboard/admin/home'
     | '/dashboard/admin/manage-task'
@@ -439,6 +451,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiSubmissionWorkerRoute: typeof ApiSubmissionWorkerRoute
   ApiTaskIdRoute: typeof ApiTaskIdRoute
   ApiPaymentHistoryIndexRoute: typeof ApiPaymentHistoryIndexRoute
   ApiSubmissionIndexRoute: typeof ApiSubmissionIndexRoute
@@ -654,6 +667,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTaskIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/submission/worker': {
+      id: '/api/submission/worker'
+      path: '/api/submission/worker'
+      fullPath: '/api/submission/worker'
+      preLoaderRoute: typeof ApiSubmissionWorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -788,6 +808,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiSubmissionWorkerRoute: ApiSubmissionWorkerRoute,
   ApiTaskIdRoute: ApiTaskIdRoute,
   ApiPaymentHistoryIndexRoute: ApiPaymentHistoryIndexRoute,
   ApiSubmissionIndexRoute: ApiSubmissionIndexRoute,
