@@ -20,24 +20,47 @@ export const Route = createFileRoute('/api/submission/')({
         const session = await ensureSession()
 
         try {
-          const submissions = await prisma.submission.findMany({
-            where: {
-              task: {
-                buyerId: session.user.id,
+          if (session.user.role === 'buyer') {
+            const submissions = await prisma.submission.findMany({
+              where: {
+                task: {
+                  buyerId: session.user.id,
+                },
+                status: 'pending',
               },
-              status: 'pending',
-            },
-            include: {
-              task: true,
-              worker: true,
-            },
-          })
+              include: {
+                task: true,
+                worker: true,
+              },
+            })
+            return Response.json({
+              success: true,
+              data: submissions,
+              message: 'Submissions Fetched Successfully.',
+            })
+          }
 
-          return Response.json({
-            success: true,
-            data: submissions,
-            message: 'Submissions Fetched Successfully.',
-          })
+          if (session.user.role === 'worker') {
+            const submissions = await prisma.submission.findMany({
+              where: {
+                workerId: session.user.id,
+                status: 'approved',
+              },
+              include: {
+                task: {
+                  include: {
+                    buyer: true,
+                  },
+                },
+              },
+            })
+
+            return Response.json({
+              success: true,
+              data: submissions,
+              message: 'Submissions Fetched Successfully.',
+            })
+          }
         } catch (error) {
           // Handle database or other unexpected errors
           return Response.json(
