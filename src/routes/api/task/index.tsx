@@ -10,17 +10,36 @@ export const Route = createFileRoute('/api/task/')({
       GET: async () => {
         const session = await ensureSession()
         try {
-          const tasks = await prisma.task.findMany({
-            where: {
-              buyerId: session.user.id,
-            },
-          })
+          if (session.user.role === 'buyer') {
+            const tasks = await prisma.task.findMany({
+              where: {
+                buyerId: session.user.id,
+              },
+            })
 
-          return Response.json({
-            success: true,
-            data: tasks,
-            message: 'Task Created Successfully.',
-          })
+            return Response.json({
+              success: true,
+              data: tasks,
+              message: 'Task for buyer fetched Successfully.',
+            })
+          }
+
+          if (session.user.role === 'worker') {
+            const tasks = await prisma.task.findMany({
+              where: {
+                requiredWorkers: { gt: 0 },
+              },
+              include: {
+                buyer: true,
+              },
+            })
+
+            return Response.json({
+              success: true,
+              data: tasks,
+              message: 'Task for worker fetched Successfully.',
+            })
+          }
         } catch (error) {
           // Handle database or other unexpected errors
           return Response.json(
