@@ -1,9 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import EmptyState from '#/components/dashboard/empty-state'
 import SectionHeader from '#/components/dashboard/section-header'
-import StatCard from '#/components/dashboard/stat-card'
 import StatusBadge from '#/components/dashboard/status-badge'
-import { Button } from '#/components/ui/button'
 import { Card } from '#/components/ui/card'
 import {
   Table,
@@ -13,17 +10,46 @@ import {
   TableHeader,
   TableRow,
 } from '#/components/ui/table'
-import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import type { ResponseSubmissionType } from '#/lib/schema/submissions'
+import { format } from 'date-fns'
 
 export const Route = createFileRoute('/dashboard/worker/submissions')({
   component: SubmissionsPage,
 })
 
+type SubmissionResponseType = {
+  data: ResponseSubmissionType[]
+  message: string
+  success: boolean
+}
+
 function SubmissionsPage() {
-  const [page, setPage] = useState(0)
-  const perPage = 5
-  const pages = Math.max(1, Math.ceil(20 / perPage))
-  // const shown = subs.slice(page * perPage, page * perPage + perPage)
+  const submissions = useQuery({
+    queryKey: ['worker-subs'],
+    queryFn: async (): Promise<SubmissionResponseType> => {
+      try {
+        const response = await axios.get('/api/submission/worker')
+        return response.data
+      } catch (error) {
+        // Handle database or other unexpected errors
+        return { success: false, message: 'Internal server error', data: [] }
+      }
+    },
+  })
+
+  if (submissions.error) {
+    return (
+      <>
+        <h1>Something went wrong</h1>
+        <p>{submissions.error.toString()}</p>
+      </>
+    )
+  }
+
+  console.log(submissions?.data?.data)
+
   return (
     <>
       <SectionHeader
@@ -42,55 +68,47 @@ function SubmissionsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* {shown.map((s) => (
-              <TableRow key={s.id}>
-                <TableCell className="font-medium">{s.taskTitle}</TableCell>
-                <TableCell>{s.buyerName}</TableCell>
-                <TableCell>{s.payableAmount} coins</TableCell>
-                <TableCell className="text-muted-foreground">
-                  {new Date(s.currentDate).toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  <StatusBadge status={s.status} />
-                </TableCell>
+            {submissions.isLoading || submissions.isPending ? (
+              <TableRow>
+                <TableCell colSpan={5}>Loading...</TableCell>
               </TableRow>
-            ))} */}
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                className="py-10 text-center text-sm text-muted-foreground"
-              >
-                No submissions yet.
-              </TableCell>
-            </TableRow>
+            ) : (
+              <>
+                {submissions.data.data.length === 0 ? (
+                  <>
+                    <TableRow>
+                      <TableCell
+                        colSpan={5}
+                        className="py-10 text-center text-sm text-muted-foreground"
+                      >
+                        No submissions yet.
+                      </TableCell>
+                    </TableRow>
+                  </>
+                ) : (
+                  <>
+                    {submissions.data.data.map((s) => (
+                      <TableRow key={s.id}>
+                        <TableCell className="font-medium">
+                          {s.task.taskTitle}
+                        </TableCell>
+                        <TableCell>{s.task.buyer.name}</TableCell>
+                        <TableCell>{s.task.payableAmount} coins</TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {format(s.currentDate, 'dd / MMMM / yyyy')}
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge status={s.status} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
           </TableBody>
         </Table>
       </Card>
-      {/* {subs.length > perPage && (
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-xs text-muted-foreground">
-            Page {page + 1} of {pages}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={page === 0}
-              onClick={() => setPage((p) => p - 1)}
-            >
-              Prev
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={page >= pages - 1}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-      )} */}
     </>
   )
 }
